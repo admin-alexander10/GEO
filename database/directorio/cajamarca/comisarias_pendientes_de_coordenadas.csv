@@ -1,0 +1,5 @@
+﻿tipo,nombre,telefono,latitud,longitud,direccion,distrito,ubicacion_aproximada,motivo_pendiente
+COMISARIA,Comisaría PNP Familia Cajamarca,980122406,,,"Jr. Amazonas N° 1210, Cajamarca - Cajamarca",Cajamarca,no,ciudad con varias comisarías: hace falta la coordenada exacta del local
+COMISARIA,"Comisaría PNP San José ""B""",980122995,,,"Jr. Chepén 511, Barrio San José - Cajamarca Cajamarca - Cajamarca",Cajamarca,no,ciudad con varias comisarías: hace falta la coordenada exacta del local
+COMISARIA,"Comisaría PNP Rural La Portada ""E""",,,,"Jr. San Luis S/N, San Benito – Contumaza - Cajamarca",San Benito,no,no hay un establecimiento de salud con el nombre de ese poblado para ubicarla
+COMISARIA,"Comisaría PNP Rural El Salitre ""E""",,,,"Av. Cajamarca N° 441, Salitre – Chilete - Contumaza Cajamarca",Tantarica,no,no hay un establecimiento de salud con el nombre de ese poblado para ubicarla

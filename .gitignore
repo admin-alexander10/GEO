@@ -1,0 +1,21 @@
+# Python virtual environments
+venv/
+backend/venv/
+env/
+.env
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+backend/__pycache__/
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Databases & local logs
+*.sqlite3
+*.log

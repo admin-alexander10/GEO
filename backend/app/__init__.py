@@ -1,0 +1,3 @@
+"""
+QuantumGeoRescue AI - Backend Package
+"""

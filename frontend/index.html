@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEORESCUE IA - Sistema de Emergencias B2G & B2C</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS & JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Estilos Propios -->
+    <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="bg-[#080c14] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-red-600 selection:text-white">
+
+    <!-- ========================================== -->
+    <!-- 1. PANTALLA DE ACCESO (LOGIN / REGISTRO)   -->
+    <!-- ========================================== -->
+    <div id="pantalla-auth" class="flex-1 flex items-center justify-center p-4 relative overflow-hidden">
+        <!-- Fondos de iluminación de alta tecnología -->
+        <div class="absolute -top-32 -left-32 w-96 h-96 bg-red-600/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-600/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="bg-slate-900/90 backdrop-blur-2xl border border-slate-800 rounded-3xl p-8 md:p-10 max-w-md w-full relative z-10 shadow-2xl">
+            <!-- Header de Marca con Logo Oficial -->
+            <div class="text-center mb-8">
+                <!-- Contenedor del Logo con Resplandor Táctico -->
+                <div class="relative inline-block mb-3.5 group">
+                    <div class="absolute -inset-2 bg-gradient-to-r from-red-600/30 via-rose-600/20 to-cyan-500/30 rounded-full blur-xl opacity-75 group-hover:opacity-100 transition duration-500"></div>
+                    <div class="relative w-24 h-24 mx-auto logo-quantum-glow">
+                        <img src="assets/logo.svg" alt="Logo GEORESCUE IA" class="w-full h-full object-contain filter drop-shadow-[0_4px_12px_rgba(239,68,68,0.4)]" />
+                    </div>
+                </div>
+
+                <!-- Título y Subtítulo de la Plataforma -->
+                <h1 class="font-black text-2xl md:text-3xl text-white tracking-tight flex items-center justify-center gap-2">
+                    GEORESCUE <span class="bg-gradient-to-r from-red-500 to-rose-500 text-transparent bg-clip-text">IA</span>
+                </h1>
+                <div class="inline-flex items-center justify-center mt-1.5 mb-2">
+                    <span class="text-[10px] font-bold tracking-widest uppercase text-red-400 bg-red-950/60 border border-red-900/50 px-2.5 py-0.5 rounded-full">
+                        Respuesta Geoespacial Inteligente
+                    </span>
+                </div>
+                <p class="text-xs text-slate-400 tracking-wide font-medium">Respuesta a Desastres & Privacidad Activa</p>
+            </div>
+
+            <!-- Selector de Pestañas -->
+            <div class="grid grid-cols-2 bg-slate-950 p-1 rounded-xl mb-6 border border-slate-800">
+                <button type="button" id="tab-login" onclick="App.cambiarTabAuth('login')" class="py-2.5 font-semibold text-xs rounded-lg text-white bg-slate-800 transition">Iniciar Sesión</button>
+                <button type="button" id="tab-registro" onclick="App.cambiarTabAuth('registro')" class="py-2.5 font-semibold text-xs rounded-lg text-slate-400 hover:text-white transition">Crear Cuenta</button>
+            </div>
+
+            <form id="form-aceptar-invitacion" class="hidden space-y-4 mb-5">
+                <div class="text-sm font-bold text-white">Invitación institucional</div>
+                <label class="block text-xs text-slate-300" for="invitacion-password">Crea una contraseña (mínimo 12 caracteres)</label>
+                <input id="invitacion-password" type="password" required minlength="12" autocomplete="new-password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white" />
+                <button type="submit" class="w-full bg-cyan-700 hover:bg-cyan-600 font-bold text-white py-3 rounded-xl text-sm">Aceptar invitación</button>
+                <div id="invitacion-feedback" class="text-xs text-center min-h-[1rem]"></div>
+            </form>
+
+            <!-- Formulario Login -->
+            <form id="form-login" onsubmit="App.manejarLogin(event)" class="space-y-4">
+                <div id="login-mode-selector" class="grid grid-cols-2 bg-slate-950 p-1 rounded-xl border border-slate-800" role="group" aria-label="Modo de acceso">
+                    <button type="button" id="login-modo-familiar" aria-pressed="true" onclick="App.cambiarModoLogin('familiar')" class="py-2.5 font-semibold text-xs rounded-lg text-white bg-slate-800 transition">Familiar</button>
+                    <button type="button" id="login-modo-institucional" aria-pressed="false" onclick="App.cambiarModoLogin('institucional')" class="py-2.5 font-semibold text-xs rounded-lg text-slate-400 hover:text-white transition">Institucional</button>
+                </div>
+                <input type="hidden" id="login-modo" value="familiar" />
+                <p id="login-modo-descripcion" class="text-[11px] text-slate-400">Acceso ciudadano y red familiar.</p>
+                <div>
+                    <label id="login-usuario-label" class="block text-xs font-semibold text-slate-300 mb-1.5">Usuario familiar</label>
+                    <input type="text" id="login-usuario" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition" placeholder="Ej. standy_cerna">
+                </div>
+                <div>
+                    <label id="login-password-label" class="block text-xs font-semibold text-slate-300 mb-1.5">Contraseña</label>
+                    <input type="password" id="login-password" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition" placeholder="••••••••">
+                </div>
+                <button type="submit" id="btn-submit-login" class="w-full bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-500 hover:to-rose-500 font-bold text-white py-3 rounded-xl text-sm transition shadow-lg shadow-red-600/25 mt-2">
+                    Acceder a la Plataforma
+                </button>
+                <div id="login-feedback" class="text-xs text-center font-medium min-h-[1rem]"></div>
+            </form>
+
+            <!-- Formulario Registro -->
+            <form id="form-registro" onsubmit="App.manejarRegistro(event)" class="space-y-4 hidden">
+                <div class="grid grid-cols-2 bg-slate-950 p-1 rounded-xl border border-slate-800" role="group" aria-label="Tipo de cuenta nueva">
+                    <button type="button" id="registro-modo-familiar" aria-pressed="true" onclick="App.cambiarModoRegistro('familiar')" class="py-2.5 font-semibold text-xs rounded-lg text-white bg-slate-800 transition">Familiar</button>
+                    <button type="button" id="registro-modo-institucional" aria-pressed="false" onclick="App.cambiarModoRegistro('institucional')" class="py-2.5 font-semibold text-xs rounded-lg text-slate-400 hover:text-white transition">Institución pública</button>
+                </div>
+                <input type="hidden" id="registro-modo" value="familiar" />
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Nuevo Identificador de Usuario</label>
+                    <input type="text" id="reg-usuario" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" placeholder="Crea tu usuario">
+                </div>
+                <div id="registro-institucion-campo" class="hidden space-y-3 rounded-xl border border-slate-800 bg-slate-950 p-3">
+                    <label class="block text-xs font-semibold text-slate-300">Nombre de la institución pública
+                        <input type="text" id="reg-institucion" maxlength="120" class="mt-1 w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2.5 text-sm text-white placeholder-slate-600 focus:border-cyan-500 focus:outline-none" placeholder="Ej. Policía Nacional del Perú">
+                    </label>
+                    <label class="block text-xs font-semibold text-slate-300">RUC (11 dígitos)
+                        <input type="text" id="reg-ruc" inputmode="numeric" pattern="\d{11}" maxlength="11" class="mt-1 w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2.5 text-sm text-white" placeholder="20123456789">
+                    </label>
+                    <label class="block text-xs font-semibold text-slate-300">Tipo de institución
+                        <input type="text" id="reg-tipo-institucion" maxlength="60" class="mt-1 w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2.5 text-sm text-white" placeholder="Policía, COER, Bomberos...">
+                    </label>
+                    <label class="block text-xs font-semibold text-slate-300">Región / jurisdicción
+                        <input type="text" id="reg-region-institucion" maxlength="100" class="mt-1 w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2.5 text-sm text-white" placeholder="Cajamarca">
+                    </label>
+                    <label class="block text-xs font-semibold text-slate-300">Correo institucional
+                        <input type="email" id="reg-correo-institucion" maxlength="200" class="mt-1 w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2.5 text-sm text-white" placeholder="contacto@institucion.gob.pe">
+                    </label>
+                    <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <label class="block text-xs font-semibold text-slate-300">Responsable de contacto
+                            <input type="text" id="reg-contacto-institucion" maxlength="120" class="mt-1 w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2.5 text-sm text-white">
+                        </label>
+                        <label class="block text-xs font-semibold text-slate-300">Teléfono de contacto
+                            <input type="tel" id="reg-telefono-institucion" maxlength="40" class="mt-1 w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2.5 text-sm text-white">
+                        </label>
+                    </div>
+                    <label class="block text-xs font-semibold text-slate-300">Enlace a directorio o documento oficial (HTTPS)
+                        <input type="url" id="reg-evidencia-institucion" placeholder="https://www.gob.pe/..." class="mt-1 w-full rounded-lg border border-slate-800 bg-slate-900 px-3 py-2.5 text-sm text-white">
+                    </label>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Contraseña de Seguridad</label>
+                    <input type="password" id="reg-password" required minlength="4" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition" placeholder="Mínimo 4 caracteres">
+                </div>
+                <button type="submit" id="btn-submit-registro" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 font-bold text-white py-3 rounded-xl text-sm transition shadow-lg shadow-blue-600/25 mt-2">
+                    Completar Registro
+                </button>
+                <div id="reg-feedback" class="text-xs text-center font-medium min-h-[1rem]"></div>
+            </form>
+
+            <button id="btn-acceso-propietarios" type="button" onclick="App.mostrarLoginPropietarios()" class="mt-5 text-[11px] text-slate-400 hover:text-cyan-300 underline underline-offset-4">Administración de propietarios</button>
+            <form id="form-login-propietarios" onsubmit="App.manejarLoginPropietarios(event)" class="hidden mt-5 space-y-3 text-left">
+                <h2 class="text-sm font-bold text-white">Acceso de propietarios</h2>
+                <label for="clave-propietarios" class="block text-xs font-semibold text-slate-300">Clave administrativa del servidor</label>
+                <input id="clave-propietarios" type="password" required autocomplete="current-password" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white" />
+                <button type="submit" class="w-full bg-cyan-700 hover:bg-cyan-600 font-bold text-white py-3 rounded-xl text-sm">Ingresar a administración</button>
+                <button type="button" onclick="App.ocultarLoginPropietarios()" class="w-full text-xs text-slate-400 hover:text-white">Volver</button>
+                <div id="owner-login-feedback" class="text-xs text-center min-h-[1rem]"></div>
+            </form>
+
+            <div class="mt-8 pt-5 border-t border-slate-800">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-slate-400">Versiones de pago</span>
+                    <span class="text-[10px] text-emerald-400 bg-emerald-950/70 border border-emerald-800 px-2 py-0.5 rounded-full">Privado / B2G</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div class="bg-slate-950 border border-slate-800 rounded-2xl p-3">
+                        <div class="text-[10px] uppercase tracking-wider text-slate-400">Free</div>
+                        <div data-plan-price="free" class="mt-2 text-2xl font-black text-white">S/0</div>
+                        <ul class="mt-3 text-[11px] text-slate-300 space-y-1.5">
+                            <li>• 1 usuario</li>
+                            <li>• SOS básico</li>
+                            <li>• Red familiar</li>
+                        </ul>
+                        <button type="button" data-plan="free" class="plan-select mt-4 w-full bg-slate-800 hover:bg-slate-700 text-white font-bold py-2 rounded-xl text-[11px] transition">
+                            Elegir Free
+                        </button>
+                    </div>
+
+                    <div class="bg-gradient-to-b from-red-950/40 to-slate-950 border border-red-700/60 rounded-2xl p-3 shadow-lg shadow-red-900/20">
+                        <div class="text-[10px] uppercase tracking-wider text-red-300">Pro</div>
+                        <div data-plan-price="pro" class="mt-2 text-2xl font-black text-white">S/39</div>
+                        <ul class="mt-3 text-[11px] text-slate-200 space-y-1.5">
+                            <li>• Alertas avanzadas</li>
+                            <li>• Mapa geolocalizado</li>
+                            <li>• Captura antirrobo</li>
+                        </ul>
+                        <button type="button" data-plan="pro" class="plan-select mt-4 w-full bg-red-600 hover:bg-red-500 text-white font-bold py-2 rounded-xl text-[11px] transition">
+                            Comprar Pro
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-950 border border-cyan-700/60 rounded-2xl p-3">
+                        <div class="text-[10px] uppercase tracking-wider text-cyan-300">Enterprise</div>
+                        <div class="mt-2 text-2xl font-black text-white">Custom</div>
+                        <ul class="mt-3 text-[11px] text-slate-300 space-y-1.5">
+                            <li>• Multi-sede</li>
+                            <li>• Integración B2G</li>
+                            <li>• Soporte 24/7</li>
+                        </ul>
+                        <button type="button" data-plan="enterprise" class="plan-select mt-4 w-full bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 rounded-xl text-[11px] transition">
+                            Consultar Enterprise
+                        </button>
+                    </div>
+                </div>
+                <div id="planes-feedback" class="mt-3 text-xs text-center text-amber-300 min-h-[1rem]" role="status"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario de pago reportado (Yape / Plin / transferencia) -->
+    <div id="modal-pago" class="hidden fixed inset-0 z-[2000] overflow-y-auto bg-black/70 p-4" role="dialog" aria-modal="true" aria-labelledby="modal-pago-titulo">
+        <div class="flex min-h-full items-center justify-center">
+        <form id="form-pago" onsubmit="App.enviarPagoReportado(event)" class="w-full max-w-md rounded-2xl border border-slate-700 bg-slate-900 p-6 text-left shadow-2xl">
+            <h2 id="modal-pago-titulo" class="text-lg font-bold text-white">Activar plan</h2>
+            <p class="mt-1 text-xs text-slate-400">Paga el monto indicado por cualquiera de estos medios y registra aquí tu operación. El plan se activa cuando validamos el pago.</p>
+
+            <div class="mt-4 rounded-xl border border-slate-800 bg-slate-950 p-4">
+                <div class="flex items-baseline justify-between">
+                    <span class="text-xs uppercase tracking-wider text-slate-400">Monto a pagar</span>
+                    <span id="modal-pago-monto" class="text-2xl font-black text-white">S/ --</span>
+                </div>
+                <p class="mt-3 text-[11px] text-slate-400">Titular: <span id="modal-pago-titular" class="font-semibold text-slate-200">--</span></p>
+                <ul id="modal-pago-destinos" class="mt-2 space-y-1 text-xs text-slate-200"></ul>
+            </div>
+
+            <label for="pago-metodo" class="mt-4 block text-xs font-semibold text-slate-300">¿Con qué medio pagaste?</label>
+            <select id="pago-metodo" required class="mt-1.5 w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white"></select>
+
+            <label for="pago-referencia" class="mt-4 block text-xs font-semibold text-slate-300">Número de operación</label>
+            <input id="pago-referencia" type="text" required minlength="4" maxlength="120" autocomplete="off" oninput="document.getElementById('pago-feedback').textContent = ''" placeholder="Ej. 01234567" class="mt-1.5 w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white placeholder-slate-600" />
+            <p class="mt-1 text-[11px] text-slate-500">Aparece en el comprobante de tu Yape, Plin o transferencia.</p>
+
+            <div id="pago-feedback" class="mt-3 min-h-[1rem] text-xs text-red-400" role="status"></div>
+
+            <div class="mt-4 flex justify-end gap-2">
+                <button type="button" onclick="App.cerrarFormularioPago()" class="rounded-xl border border-slate-700 px-4 py-2.5 text-xs font-semibold text-slate-200 hover:bg-slate-800">Cancelar</button>
+                <button type="submit" id="pago-enviar" class="rounded-xl bg-red-600 px-4 py-2.5 text-xs font-bold text-white hover:bg-red-500">Registrar mi pago</button>
+            </div>
+        </form>
+        </div>
+    </div>
+
+    <main id="panel-administracion" class="hidden flex-1 bg-slate-950 text-slate-100">
+        <header class="sticky top-0 z-40 flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-900 px-5 py-4 md:px-8">
+            <div>
+                <p class="text-[10px] font-bold uppercase tracking-widest text-cyan-300">GEORESCUE IA / PROPIETARIOS</p>
+                <h1 class="mt-1 text-xl font-bold text-white">Revisión de instituciones</h1>
+            </div>
+            <div class="flex items-center gap-2">
+                <button type="button" onclick="App.cargarSolicitudesInstitucionales()" class="rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xs text-slate-200 hover:bg-slate-700">Actualizar</button>
+                <button type="button" onclick="App.cerrarSesionPropietarios()" class="rounded-lg bg-red-700 px-3 py-2 text-xs font-semibold text-white hover:bg-red-600">Cerrar sesión</button>
+            </div>
+        </header>
+        <section class="mx-auto w-full max-w-6xl p-4 md:p-8">
+            <form id="owner-password-change-form" onsubmit="App.cambiarContrasenaPropietarios(event)" class="hidden mb-6 max-w-xl rounded-xl border border-amber-800 bg-amber-950/30 p-5">
+                <h2 class="text-base font-bold text-amber-200">Cambia la contraseña temporal</h2>
+                <p class="mt-1 text-xs text-slate-300">Antes de revisar instituciones, reemplaza `admin` por una contraseña nueva de al menos 12 caracteres.</p>
+                <label class="mt-4 block text-xs text-slate-300">Contraseña actual
+                    <input id="owner-current-password" type="password" required autocomplete="current-password" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white" />
+                </label>
+                <label class="mt-3 block text-xs text-slate-300">Nueva contraseña
+                    <input id="owner-new-password" type="password" required minlength="12" autocomplete="new-password" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white" />
+                </label>
+                <label class="mt-3 block text-xs text-slate-300">Confirma la nueva contraseña
+                    <input id="owner-confirm-password" type="password" required minlength="12" autocomplete="new-password" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white" />
+                </label>
+                <div id="owner-password-feedback" class="mt-3 text-xs text-slate-300" role="status"></div>
+                <button type="submit" class="mt-4 rounded-lg bg-cyan-700 px-4 py-2 text-xs font-semibold text-white hover:bg-cyan-600">Guardar contraseña y continuar</button>
+            </form>
+            <div id="owner-applications-section">
+            <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+                <p class="max-w-2xl text-xs leading-relaxed text-slate-400">Revisa los datos declarados y contrástalos en una fuente oficial antes de decidir. Cada decisión exige fuente consultada y observaciones.</p>
+                <select id="owner-application-filter" onchange="App.cargarSolicitudesInstitucionales()" class="rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs text-slate-200">
+                    <option value="pending">Pendientes</option>
+                    <option value="approved">Aprobadas</option>
+                    <option value="rejected">Rechazadas</option>
+                    <option value="all">Todas</option>
+                </select>
+            </div>
+            <div id="owner-applications-feedback" class="mb-4 text-xs text-slate-400" role="status"></div>
+            <div id="owner-applications-list" class="grid grid-cols-1 gap-4 lg:grid-cols-2"></div>
+
+            <div class="mt-10 border-t border-slate-800 pt-6">
+                <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-base font-bold text-white">Pagos por validar</h2>
+                        <p class="mt-1 max-w-2xl text-xs leading-relaxed text-slate-400">Solicitudes de plan de pago registradas sin pasarela. Aprueba solo después de comprobar que el pago se recibió.</p>
+                    </div>
+                    <span id="owner-payments-feedback" class="text-xs text-slate-400" role="status"></span>
+                </div>
+                <div id="owner-payments-list" class="grid grid-cols-1 gap-3 lg:grid-cols-2"></div>
+            </div>
+
+            <div class="mt-10 border-t border-slate-800 pt-6">
+                <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-base font-bold text-white">Cobertura de instituciones</h2>
+                        <p class="mt-1 max-w-2xl text-xs leading-relaxed text-slate-400">Define la zona que cada institución aprobada atiende: un punto central y un radio. Una alerta nueva aparece en su bandeja solo si su ubicación cae dentro de esa zona. Sin cobertura validada, la institución no recibe alertas automáticas.</p>
+                    </div>
+                    <span id="owner-coverage-feedback" class="text-xs text-slate-400" role="status"></span>
+                </div>
+                <div id="owner-coverage-list" class="grid grid-cols-1 gap-3 lg:grid-cols-2"></div>
+            </div>
+
+            <div class="mt-10 border-t border-slate-800 pt-6">
+                <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-base font-bold text-white">Alertas sin institución asignada</h2>
+                        <p class="mt-1 max-w-2xl text-xs leading-relaxed text-slate-400">Alertas abiertas que ninguna institución ve: llegaron sin ubicación o fuera de toda cobertura. Asígnalas a mano solo si sabes a quién le corresponde, y anota por qué.</p>
+                    </div>
+                    <span id="owner-unassigned-feedback" class="text-xs text-slate-400" role="status"></span>
+                </div>
+                <div id="owner-unassigned-list" class="grid grid-cols-1 gap-3 lg:grid-cols-2"></div>
+            </div>
+
+            <div class="mt-10 border-t border-slate-800 pt-6">
+                <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-base font-bold text-white">Directorio de emergencia</h2>
+                        <p class="mt-1 max-w-2xl text-xs leading-relaxed text-slate-400">Comisarías, compañías de bomberos y centros de salud que la app muestra como «Cerca de ti», debajo de 105, 116 y 106. Carga solo datos de una fuente oficial y anota cuándo la revisaste: un teléfono equivocado cuesta tiempo en una emergencia.</p>
+                    </div>
+                    <span id="owner-directory-summary" class="text-xs text-slate-400" role="status"></span>
+                </div>
+                <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                    <form id="owner-directory-import" onsubmit="App.importarDirectorio(event)" class="rounded-xl border border-slate-800 bg-slate-900 p-4 text-xs">
+                        <h3 class="text-sm font-bold text-white">Cargar desde un archivo CSV</h3>
+                        <p class="mt-1 text-slate-400">Columnas: <span class="font-mono text-slate-200">nombre, latitud, longitud</span> (obligatorias) y <span class="font-mono text-slate-200">tipo, telefono, direccion, distrito, ubicacion_aproximada</span>. Si una entrada ya existe se actualiza.</p>
+                        <label class="mt-3 block text-slate-300">Archivo
+                            <input id="owner-directory-file" type="file" accept=".csv,text/csv" required class="mt-1 block w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white file:mr-3 file:rounded file:border-0 file:bg-slate-700 file:px-2 file:py-1 file:text-white" />
+                        </label>
+                        <div class="mt-2 grid grid-cols-2 gap-2">
+                            <label class="block text-slate-300">Tipo de las filas
+                                <select id="owner-directory-type" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-2 py-2 text-xs text-white">
+                                    <option value="">El archivo trae la columna «tipo»</option>
+                                    <option value="COMISARIA">Todas son comisarías</option>
+                                    <option value="BOMBEROS">Todas son bomberos</option>
+                                    <option value="SALUD">Todas son salud</option>
+                                    <option value="SERENAZGO">Todas son serenazgo</option>
+                                </select>
+                            </label>
+                            <label class="block text-slate-300">Fecha en que revisaste la fuente
+                                <input id="owner-directory-date" type="date" required class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-2 py-2 text-xs text-white" />
+                            </label>
+                        </div>
+                        <label class="mt-2 block text-slate-300">Fuente de los datos
+                            <input id="owner-directory-source" type="text" required minlength="10" maxlength="1000" placeholder="Nombre del documento oficial y su enlace" class="mt-1 w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white" />
+                        </label>
+                        <div class="mt-3 flex justify-end">
+                            <button type="submit" class="rounded-lg bg-emerald-700 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-600">Cargar archivo</button>
+                        </div>
+                        <div id="owner-directory-result" class="mt-3 space-y-1 text-slate-300" role="status"></div>
+                    </form>
+                    <div class="rounded-xl border border-slate-800 bg-slate-900 p-4 text-xs">
+                        <h3 class="text-sm font-bold text-white">Revisar y corregir entradas</h3>
+                        <form onsubmit="App.buscarEnDirectorio(event)" class="mt-3 flex gap-2">
+                            <label for="owner-directory-search" class="sr-only">Buscar por nombre o distrito</label>
+                            <input id="owner-directory-search" type="search" placeholder="Nombre o distrito" class="min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white" />
+                            <button type="submit" class="rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-xs text-slate-200 hover:bg-slate-700">Buscar</button>
+                        </form>
+                        <div id="owner-directory-list" class="mt-3 max-h-96 space-y-2 overflow-y-auto"></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-evidencia" class="hidden fixed inset-0 z-[2100] items-center justify-center bg-black/80 p-4" role="dialog" aria-modal="true" aria-labelledby="modal-evidencia-titulo">
+        <div class="w-full max-w-lg rounded-2xl border border-slate-700 bg-slate-900 p-4">
+            <div class="flex items-center justify-between gap-3">
+                <h2 id="modal-evidencia-titulo" class="text-sm font-bold text-white">Evidencia antirrobo</h2>
+                <button type="button" onclick="App.cerrarEvidencia()" class="rounded-lg border border-slate-700 px-3 py-1.5 text-xs text-slate-200 hover:bg-slate-800">Cerrar</button>
+            </div>
+            <img id="modal-evidencia-foto" alt="Foto capturada por el modo antirrobo" class="mt-3 max-h-[70vh] w-full rounded-xl border border-slate-800 object-contain" />
+        </div>
+    </div>
+
+    <div id="anti-theft-overlay" class="hidden fixed inset-0 z-[120] bg-slate-950/95 backdrop-blur-md items-center justify-center p-6">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl p-7 max-w-md w-full text-center shadow-2xl">
+            <div class="text-4xl animate-pulse mb-3">💻</div>
+            <h3 id="anti-theft-title" class="text-lg font-black text-white">Cargando sistema de seguridad...</h3>
+            <p id="anti-theft-detail" class="mt-2 text-xs text-slate-300">Se está ejecutando el modo señuelo para proteger los datos del usuario.</p>
+            <div class="mt-5 h-2 rounded-full bg-slate-800 overflow-hidden">
+                <div class="h-full w-2/3 bg-gradient-to-r from-red-500 via-amber-500 to-emerald-500 animate-pulse"></div>
+            </div>
+            <video id="anti-theft-video" autoplay playsinline muted class="hidden"></video>
+            <canvas id="anti-theft-canvas" class="hidden"></canvas>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 2. PANEL PRINCIPAL (DASHBOARD COMPLETO)    -->
+    <!-- ========================================== -->
+    <div id="pantalla-dashboard" class="hidden flex-1 flex flex-col">
+        <!-- Barra de Navegación Superior -->
+        <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 py-3.5 px-6 flex justify-between items-center sticky top-0 z-50 shadow-md">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 flex-shrink-0">
+                    <img src="assets/logo.svg" alt="GEORESCUE IA" class="w-full h-full object-contain filter drop-shadow-[0_0_8px_rgba(239,68,68,0.4)]" />
+                </div>
+                <div>
+                    <h1 class="font-bold text-sm text-white flex items-center gap-2">
+                        GEORESCUE <span class="text-red-500 font-extrabold">IA</span>
+                        <span id="badge-rol" class="text-[10px] bg-red-950/70 text-red-300 border border-red-800 px-2 py-0.5 rounded-md font-mono">B2C</span>
+                        <button type="button" id="btn-mejorar-plan" onclick="App.contratarPlan('pro')" class="hidden text-[10px] font-semibold bg-red-600 hover:bg-red-500 text-white px-2 py-0.5 rounded-md transition">Mejorar a Pro</button>
+                    </h1>
+                    <p class="text-[11px] text-slate-400">Sistema Geoespacial con PostGIS & Detección Inercial</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800 text-xs text-slate-300">
+                    <span id="indicador-servidor" class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span>
+                    <span id="lbl-usuario" class="font-bold text-white">--</span>
+                </div>
+                <button onclick="App.cerrarSesion()" class="bg-slate-800 hover:bg-red-600 hover:text-white text-slate-300 text-xs font-semibold px-3.5 py-2 rounded-xl transition">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </header>
+
+        <!-- ========================================================= -->
+        <!-- 2.1 VISTA CIUDADANO (B2C: SOS, Privacidad, Red Familiar)   -->
+        <!-- ========================================================= -->
+        <main id="vista-ciudadano" class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Columna Izquierda: Privacidad y Familia -->
+            <div class="space-y-6">
+                <!-- Tarjeta Privacidad Activa -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl">
+                    <div class="flex justify-between items-center mb-3">
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                            <span>📡</span> Privacidad Activa
+                        </h2>
+                        <span id="radar-badge" class="text-[10px] font-semibold bg-emerald-950 text-emerald-400 border border-emerald-800/80 px-2.5 py-1 rounded-lg">
+                            Modo Seguro (Standby)
+                        </span>
+                    </div>
+                    <p id="radar-detalle" class="text-xs text-slate-400 leading-relaxed">
+                        Tu geolocalización precisa se mantiene cifrada y oculta. Solo se transmitirá a los centros de rescate si confirmas una emergencia o quedas inconsciente.
+                    </p>
+
+                    <div class="mt-4 space-y-3">
+                        <button type="button" onclick="App.activarPanicSilencioso()" class="w-full bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white font-bold px-4 py-3 rounded-2xl text-xs transition shadow-lg shadow-violet-600/30">
+                            🚨 Activar Pánico Silencioso
+                        </button>
+                        <button type="button" onclick="App.activarModoSeñueloAntirrobo()" class="w-full bg-gradient-to-r from-slate-700 to-slate-600 hover:from-slate-600 hover:to-slate-500 text-white font-bold px-4 py-3 rounded-2xl text-xs transition shadow-lg shadow-slate-700/30">
+                            ⏻ Apagar sistema
+                        </button>
+                        <div id="estado-panic-silencioso" class="text-[11px] text-slate-300 bg-slate-950 border border-slate-800 rounded-xl p-2">
+                            Escucha ambiental inactiva. El módulo de coacción queda separado del sistema de sismos.
+                        </div>
+                    </div>
+
+                    <div class="mt-4 border-t border-slate-800 pt-4 space-y-2">
+                        <h3 class="text-[10px] font-bold uppercase tracking-wide text-slate-400">Foto de evidencia al correo</h3>
+                        <p class="text-[11px] leading-relaxed text-slate-400">
+                            Registra un correo y la cámara frontal tomará una foto que se envía ahí con tu ubicación cuando envíes un SOS o un pánico, toques un número de emergencia o uses «Apagar sistema». Después de una alerta el correo queda bloqueado 24 horas: nadie con tu dispositivo puede cambiarlo.
+                        </p>
+                        <form onsubmit="App.guardarCorreoSeguridad(event)" class="flex gap-2">
+                            <label for="correo-seguridad" class="sr-only">Correo de seguridad</label>
+                            <input type="email" id="correo-seguridad" maxlength="255" placeholder="tu-correo@ejemplo.com" class="min-w-0 flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-red-500 transition disabled:opacity-60">
+                            <button type="submit" id="btn-guardar-correo-seguridad" class="bg-slate-800 hover:bg-slate-700 text-white font-semibold px-3 py-2 rounded-xl text-xs transition disabled:opacity-50">Guardar</button>
+                        </form>
+                        <div id="correo-seguridad-estado" class="min-h-[1rem] text-[11px] text-slate-400" role="status"></div>
+                        <div id="camara-estado" class="text-[11px] text-slate-400" role="status"></div>
+                        <div id="lista-evidencias" class="space-y-1.5"></div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Red Familiar -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+                            <span>🛡️</span> Red de Protección Familiar
+                        </h2>
+                        <button type="button" id="codigo-enlace-lbl" onclick="App.copiarMiCodigo()" title="Copiar mi código" class="text-[10px] font-mono bg-slate-950 px-2 py-1 rounded border border-slate-800 text-amber-400 font-bold hover:border-amber-500 transition"></button>
+                    </div>
+                    <p class="text-[11px] leading-relaxed text-slate-400">
+                        Para vincularte con alguien, pídele su código (lo ve arriba como «Mi Código») y escríbelo aquí. Nadie puede invitarte sin que tú le des el tuyo.
+                    </p>
+
+                    <form id="form-familiar" onsubmit="App.agregarFamiliar(event)" class="space-y-3">
+                        <div>
+                            <label for="fam-codigo" class="sr-only">Código de tu familiar</label>
+                            <input type="text" id="fam-codigo" required minlength="4" maxlength="50" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Código de tu familiar (ej. GEO-1A2B3C)" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs font-mono uppercase text-white placeholder:normal-case placeholder:font-sans focus:outline-none focus:border-red-500 transition">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="fam-parentesco" required minlength="2" maxlength="80" placeholder="Parentesco" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-red-500 transition">
+                            <span class="text-[10px] text-slate-500 flex items-center">La otra cuenta debe aceptar la invitación</span>
+                        </div>
+                        <button type="submit" class="w-full bg-slate-800 hover:bg-slate-700 text-white font-semibold py-2.5 rounded-xl text-xs transition">
+                            + Enviar invitación
+                        </button>
+                        <div id="fam-feedback" class="min-h-[1rem] text-[11px] text-slate-400" role="status"></div>
+                    </form>
+
+                    <div id="invitaciones-enviadas" class="space-y-2"></div>
+
+                    <div id="lista-familiares" class="space-y-2 pt-2 max-h-48 overflow-y-auto">
+                        <!-- Renderizado dinámico -->
+                    </div>
+
+                    <div id="invitaciones-familiares" class="space-y-2 pt-2"></div>
+
+                    <div class="pt-2">
+                        <h3 class="text-[10px] font-bold uppercase tracking-wide text-slate-400">Buzón familiar de alertas</h3>
+                        <div id="buzon-alertas-familiares" class="space-y-2 pt-2 max-h-56 overflow-y-auto">
+                            <p class="text-xs text-slate-500">Las alertas aparecerán aquí solo si aceptaste un vínculo.</p>
+                        </div>
+                    </div>
+
+                    <!-- El estado informa disponibilidad en el buzón, no lectura o despacho externo. -->
+                    <div id="caja-alerta-familiar" class="hidden bg-red-950/70 border border-red-800/80 p-4 rounded-2xl space-y-2.5">
+                        <div class="flex items-center gap-2 text-xs font-bold text-red-400">
+                            <span class="w-2 h-2 rounded-full bg-red-500 animate-ping inline-block"></span>
+                            <span>🚨 Estado de disponibilidad familiar</span>
+                        </div>
+                        <p class="text-[11px] text-slate-300">
+                            Una alerta disponible en el buzón no implica que haya sido leída o atendida.
+                        </p>
+                        <div id="detalle-familiares-sos" class="text-[11px] text-slate-300 space-y-1 bg-slate-950/80 p-2.5 rounded-xl border border-slate-800">
+                            <!-- Familiares notificados -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Consola Sismo Zero-Touch y Mapa -->
+            <div class="lg:col-span-2 space-y-6 flex flex-col">
+                <!-- Panel de Alerta Sísmica Zero-Touch -->
+                <div class="bg-gradient-to-r from-red-950/60 via-slate-900 to-slate-900 border border-red-500/30 rounded-3xl p-6 shadow-xl">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h2 class="text-base font-bold text-red-400 flex items-center gap-2">
+                                <span>🚨</span> Sensor de Sismo & Automatización Zero-Touch
+                            </h2>
+                            <p id="estado-sensor" class="text-xs text-slate-300 mt-1">
+                                Sensores inerciales activos. Simula una sacudida para probar el despacho automático.
+                            </p>
+                        </div>
+                        <div class="flex items-center gap-3 w-full sm:w-auto">
+                            <button onclick="App.simularSismo()" id="btn-simular" class="bg-amber-600 hover:bg-amber-500 text-white font-bold px-4 py-3 rounded-2xl text-xs transition shadow-lg shadow-amber-600/20 whitespace-nowrap">
+                                Simular Sismo 6.8
+                            </button>
+                            <button onclick="App.dispararAlertaManual()" id="btn-sos-manual" class="bg-red-600 hover:bg-red-500 active:scale-95 text-white font-black px-5 py-3 rounded-2xl text-xs transition shadow-lg shadow-red-600/30 whitespace-nowrap pulse-critical">
+                                ¡SOS INMEDIATO!
+                            </button>
+                        </div>
+                        <div class="mt-4 rounded-xl border border-amber-700/60 bg-amber-950/40 p-3" role="region" aria-label="Números oficiales de emergencia">
+                            <div class="text-[11px] font-bold uppercase tracking-wide text-amber-300">Si no puedes confirmar recepción en la app, llama directamente</div>
+                            <div class="mt-2 flex flex-wrap gap-2">
+                                <a href="tel:105" class="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-bold text-white">PNP 105</a>
+                                <a href="tel:116" class="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-bold text-white">Bomberos 116</a>
+                                <a href="tel:106" class="rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs font-bold text-white">SAMU 106</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Números locales: fila propia a todo el ancho, debajo de los nacionales -->
+                    <div class="mt-4 rounded-xl border border-amber-700/60 bg-amber-950/40 p-3" role="region" aria-label="Números de emergencia cercanos">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <span class="text-[11px] font-bold uppercase tracking-wide text-amber-300">Cerca de ti</span>
+                            <button type="button" id="btn-numeros-cercanos" onclick="App.mostrarNumerosCercanos()" class="rounded-lg border border-slate-700 bg-slate-950 px-3 py-1.5 text-[11px] font-semibold text-white hover:bg-slate-800">Buscar con mi ubicación</button>
+                        </div>
+                        <p id="numeros-cercanos-estado" class="mt-1 text-[10px] leading-relaxed text-slate-400" role="status">La distancia se calcula en este dispositivo: tu ubicación no se envía.</p>
+                        <div id="numeros-cercanos" class="mt-2 grid grid-cols-1 gap-2 md:grid-cols-3"></div>
+                    </div>
+
+                    <!-- Caja de Conteo Regresivo (Oculta por defecto) -->
+                    <div id="caja-conteo" class="hidden mt-4 pt-4 border-t border-red-800/40 flex flex-col sm:flex-row justify-between items-center gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl animate-spin">⏳</span>
+                            <div>
+                                <div class="text-xs font-bold text-red-400">¿Estás a salvo? Despachando alerta en:</div>
+                                <div class="text-lg font-black text-white"><span id="lbl-segundos" class="text-amber-400 text-2xl font-mono">10</span> segundos</div>
+                            </div>
+                        </div>
+                        <button onclick="App.confirmarEstoyBien()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-5 py-2.5 rounded-xl text-xs transition shadow-lg shadow-emerald-600/30">
+                            ✅ Estoy bien (Cancelar Alerta)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mapa Ciudadano -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl flex-1 min-h-[360px] flex flex-col">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Geolocalización Personal</h3>
+                        <span id="coords-ciudadano" class="text-[11px] font-mono text-slate-400 bg-slate-950 px-2.5 py-1 rounded-lg border border-slate-800">
+                            Lat: -7.1637, Lng: -78.5003
+                        </span>
+                    </div>
+                    <div id="mapa-ciudadano" class="w-full flex-1 rounded-2xl min-h-[280px] z-10 border border-slate-800"></div>
+                </div>
+
+                <!-- Bitácora de Eventos -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl">
+                    <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">Bitácora de Despacho & Notificación Institucional</h3>
+                    <div id="log-ciudadano" class="bg-slate-950 border border-slate-800 rounded-2xl p-4 text-xs text-slate-300 font-mono h-28 overflow-y-auto space-y-1">
+                        <div class="text-slate-500">[Sistema inicializado en modo standby. Privacidad activa.]</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ========================================================= -->
+        <!-- 2.2 VISTA INSTITUCIONAL (B2G: Tablero Táctico & Rutas)     -->
+        <!-- ========================================================= -->
+        <main id="vista-institucion" class="hidden flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+            <!-- Métricas Clave B2G -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow">
+                    <div class="text-xs text-slate-400 font-medium">Alertas asignadas a esta institución</div>
+                    <div id="b2g-metrica-alertas" class="text-2xl font-black text-red-400 mt-1">0</div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow">
+                    <div class="text-xs text-slate-400 font-medium">Unidades B2G asignadas</div>
+                    <div class="text-2xl font-black text-amber-400 mt-1">Sin datos disponibles</div>
+                </div>
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow">
+                    <div class="text-xs text-slate-400 font-medium">Institución autenticada</div>
+                    <div id="b2g-institucion" class="text-2xl font-black text-blue-400 mt-1">—</div>
+                </div>
+            </div>
+
+            <!-- Contenido Táctico B2G -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Lista de Alertas PostGIS -->
+                <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 shadow-xl flex flex-col">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xs font-bold uppercase tracking-wider text-slate-200">Incidentes Críticos Recibidos</h2>
+                        <button onclick="App.cargarAlertasB2G()" class="text-xs bg-slate-800 hover:bg-slate-700 px-2.5 py-1 rounded-lg text-slate-300 transition">
+                            🔄 Refrescar
+                        </button>
+                    </div>
+                    <div id="lista-alertas-b2g" class="space-y-3 flex-1 overflow-y-auto max-h-[500px]">
+                        <p class="text-xs text-slate-500">Cargando alertas desde PostGIS...</p>
+                    </div>
+
+                    <div class="mt-4 bg-slate-950 border border-slate-800 rounded-2xl p-3">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-300">Acceso Institucional</h3>
+                            <span class="text-[10px] text-amber-300 bg-amber-950/70 border border-amber-800 px-2 py-1 rounded-full">Plan institucional</span>
+                        </div>
+
+                        <div class="grid grid-cols-1 gap-2 mb-3">
+                            <input id="institucion-nombre" type="text" readonly class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 placeholder-slate-500" placeholder="Institución de la cuenta" />
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <input id="institucion-usuario-nombre" type="text" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 placeholder-slate-500" placeholder="Nombre del usuario" />
+                                <input id="institucion-usuario-email" type="email" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200 placeholder-slate-500" placeholder="correo@institucion.pe" />
+                            </div>
+                            <div class="flex items-center justify-between gap-2">
+                                <select id="institucion-rol" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200">
+                                    <option value="operador">Operador</option>
+                                    <option value="analista">Analista</option>
+                                    <option value="coordinador">Coordinador</option>
+                                </select>
+                                <button id="btn-agregar-usuario-institucion" type="button" class="bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-bold px-3 py-2 rounded-xl transition">
+                                    Agregar usuario
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-2 mb-3">
+                            <select id="institucion-plan" class="flex-1 bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-slate-200">
+                                <option value="pro">Pro</option>
+                                <option value="enterprise">Enterprise</option>
+                            </select>
+                            <button type="button" onclick="App.guardarPlanInstitucional()" class="bg-cyan-700 hover:bg-cyan-600 text-white text-[10px] font-bold px-3 py-2 rounded-xl">Actualizar plan</button>
+                        </div>
+
+                        <div class="mb-3 bg-slate-900 border border-slate-800 rounded-xl p-2 text-[10px] text-slate-300">
+                            <div class="flex justify-between items-center">
+                                <span>Usuarios incluidos</span>
+                                <span id="institucion-usuarios-incluidos" class="text-blue-300">10</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-1">
+                                <span>Usuarios extra</span>
+                                <span id="institucion-usuarios-extra" class="text-amber-300">0</span>
+                            </div>
+                            <div class="flex justify-between items-center mt-1">
+                                <span>Precio mensual</span>
+                                <span id="institucion-costo-mensual" class="text-emerald-300">S/299</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-800">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-300">Miembros de la cuenta institucional</h3>
+                                <span id="contador-miembros-institucion" class="text-[10px] text-cyan-300 bg-cyan-950/70 border border-cyan-800 px-2 py-1 rounded-full">0</span>
+                            </div>
+                            <div id="miembros-institucion-b2g" class="space-y-2 max-h-44 overflow-y-auto">
+                                <p class="text-xs text-slate-500">No hay miembros en esta cuenta.</p>
+                            </div>
+                            <input id="institucion-enlace-invitacion" readonly class="hidden mt-2 w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-[10px] text-slate-300" aria-label="Enlace de invitación generado" />
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-800">
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-[10px] font-bold uppercase tracking-wider text-slate-300">Personas atendidas en incidentes</h3>
+                                <span id="contador-personas-atendidas" class="text-[10px] text-emerald-300 bg-emerald-950/70 border border-emerald-800 px-2 py-1 rounded-full">0</span>
+                            </div>
+                            <div id="personas-atendidas-b2g" class="space-y-2 max-h-44 overflow-y-auto">
+                                <p class="text-xs text-slate-500">No hay personas atendidas aún.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mapa Táctico B2G y Control de Enrutamiento -->
+                <div class="lg:col-span-2 space-y-4 flex flex-col">
+                    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-5 shadow-xl flex-1 flex flex-col min-h-[420px]">
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-300">Mapa Táctico Institucional (PostGIS & Enrutamiento)</h3>
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs text-amber-300">Proveedor de rutas no configurado</span>
+                            </div>
+                        </div>
+                        <div id="mapa-b2g" class="w-full flex-1 rounded-2xl min-h-[360px] z-10 border border-slate-800"></div>
+                    </div>
+
+                    <!-- Panel de Despacho de Ruta -->
+                    <div id="panel-ruta-info" class="bg-slate-900 border border-slate-800 rounded-2xl p-4 text-xs font-mono text-slate-300 flex flex-col sm:flex-row justify-between items-center gap-2">
+                        <div>
+                            <span class="text-slate-400">Estado de Enrutamiento:</span> 
+                            <span id="ruta-estado" class="text-amber-300 font-bold">No hay proveedor de rutas configurado; no se muestra ruta ni ETA.</span>
+                        </div>
+                        <div id="ruta-tiempo" class="text-amber-400 font-bold"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts de la Aplicación -->
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

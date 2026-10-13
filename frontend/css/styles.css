@@ -1,0 +1,56 @@
+/* Estilos personalizados para QuantumGeoRescue AI */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+.glow-card-red {
+    box-shadow: 0 0 50px -10px rgba(239, 68, 68, 0.2);
+}
+
+.glow-card-blue {
+    box-shadow: 0 0 50px -10px rgba(59, 130, 246, 0.2);
+}
+
+.pulse-critical {
+    animation: pulse-critical 1.5s infinite;
+}
+
+@keyframes pulse-critical {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 25px 8px rgba(239, 68, 68, 0.4);
+    }
+}
+
+/* Scrollbar estilizada */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #090d16;
+}
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+}
+
+/* Logo Quantum Glow & Hover */
+.logo-quantum-glow {
+    filter: drop-shadow(0 0 15px rgba(239, 68, 68, 0.35)) drop-shadow(0 0 25px rgba(14, 165, 233, 0.25));
+    transition: all 0.4s ease;
+}
+
+.logo-quantum-glow:hover {
+    filter: drop-shadow(0 0 22px rgba(239, 68, 68, 0.6)) drop-shadow(0 0 35px rgba(14, 165, 233, 0.5));
+    transform: scale(1.04);
+}

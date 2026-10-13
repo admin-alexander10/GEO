@@ -1,0 +1,136 @@
+﻿tipo,nombre,telefono,latitud,longitud,direccion,distrito,ubicacion_aproximada
+SALUD,Centro de Salud Jose Sabogal,973583571,-7.251597,-78.037336,Jr. San Juan S/N,Jose Sabogal,no
+SALUD,Centro de Salud Malcas,952817798,-7.510073,-78.142337,Cp Malcas,Condebamba,no
+SALUD,Centro de Salud la Ramada,,-6.21138,-78.55653,Jr. Prolongacion Comercio S/N,La Ramada,no
+SALUD,Centro de Salud Sallique,,-5.656203,-79.31578,Calle Alfonso Ugarte S/N,Sallique,no
+SALUD,Centro de Salud Pulan,992683527,-6.73994,-78.92323,Gnrl. Cabrejos S/N,Pulan,no
+SALUD,Centro Medico Celendin (EsSalud),076 555051,-6.868357,-78.142254,Jr. Salaverry Cuadra 7,Celendin,no
+SALUD,Centro Medico Chota (EsSalud),076 351478,-6.562283,-78.647319,Jr. Edelmira Silva N° 242,Chota,no
+SALUD,Centro de Salud Chimban,968833443,-6.251889,-78.477944,Distrito de Chimban,Chimban,no
+SALUD,Centro de Salud Encañada,,-7.086015,-78.343612,Jr. Lima S/N,Encañada,no
+SALUD,Centro de Salud el Triunfo de Huarango,959457174,-5.33944,-78.67386,Calle Cajamarca S/N,Huarango,no
+SALUD,Centro de Salud Sinchimache,,-6.283643,-78.961043,Jr. Cajamarca S/N,Cutervo,no
+SALUD,Centro de Salud San Juan de Cutervo,076 813560,-6.164306,-78.597963,Salida A la Ramadita,San Juan de Cutervo,no
+SALUD,Centro de Salud Huarandoza,951962986,-5.18361,-78.72883,Distrito de Huarandoza,Huarango,no
+SALUD,Centro de Salud Pachacutec,,-7.20029,-78.48587,Av. Peru N°900 - Cajamarca,Cajamarca,no
+SALUD,Centro de Salud Rumipite,,-5.38766,-78.97517,Comunidad de Rumipite,La Coipa,no
+SALUD,Centro de Salud Tongod,,-6.76306,-78.82383,Urb. el Carmen S/N,Tongod,no
+SALUD,Centro de Salud Choros,,-5.902896,-78.69578,Distrito Choros,Choros,no
+SALUD,Centro de Salud Panchia,976769863,-5.348198,-79.116698,Call. Lima S/N,Tabaconas,no
+SALUD,Centro Medico Cajabamba (EsSalud),076 551006,-7.622438,-78.050162,Jr. Odonavan S/N,Cajabamba,no
+SALUD,Centro de Salud San Miguel,952811524,-6.99998,-78.85382,Jr. 28 de Julio S/N,San Miguel,no
+SALUD,Centro de Salud Fila Alta,,-5.739184,-78.791643,Comunidad Fila Alta,Jaen,no
+SALUD,Centro de Salud Tacabamba,959052437,-6.39329,-78.61268,Jr. 7 de Junio S/N,Tacabamba,no
+SALUD,Centro de Salud Huambocancha Baja,,-7.113211,-78.5328,Huambocancha Baja Km 3.5 - Carretera A Bambamarca,Cajamarca,no
+SALUD,Centro de Salud de Apoyo Chilete,076 554124,-7.220422,-78.840105,Jr. Victor Raul Haya de la Torre 323,Chilete,no
+SALUD,Centro de Salud Contumaza,952809758,-7.366429,-78.808,Av. Corcuera S/N,Contumaza,no
+SALUD,Centro de Salud Virgen del Carmen,976850607,-6.678786,-78.517272,Jr. Ahaualpa N° 221-Bambamarca,Bambamarca,no
+SALUD,Centro de Salud Magna Vallejo,,-7.0993,-78.58732,Jr. J. Velasco C-4,Cajamarca,no
+SALUD,Centro de Salud Yararahue,947455685,-5.03595,-78.92205,Caserio Yararahue,San Jose de Lourdes,no
+SALUD,Hospital Regional Cajamarca,076 362156,-7.183407,-78.487692,Av. Mario Urteaga Nº 500,Cajamarca,no
+SALUD,Centro de Salud Hualgayoc,976690373,-6.766555,-78.607603,Distrito de Hualgayoc,Hualgayoc,no
+SALUD,Hospital San Javier Bellavista,,-5.663443,-78.677192,Jr Daniel Alcides Carrion S/N,Bellavista,no
+SALUD,Centro de Salud Pimpingos,,-6.060707,-78.756689,Jr. Comercio S/N,Pimpingos,no
+SALUD,Centro de Salud Sucre,952804551,-6.939616,-78.135145,Av. Jose Clodomiro Chavez N° 390,Sucre,no
+SALUD,Centro de Salud Cochalan,943796120,-5.468226,-78.989384,Cochalan,San Jose del Alto,no
+SALUD,Centro de Salud Chancay Baños,950882716,-6.575338,-78.86655,Distrito Chancay Baños,Chancaybaños,no
+SALUD,Centro de Salud Chuquibamba,952816784,-7.633924,-78.140748,Cpm Chuquibamba,Cachachi,no
+SALUD,Centro de Salud Lajas,969880253,-6.56168,-78.73913,Distrito Lajas,Lajas,no
+SALUD,Centro de Salud Sumidero,076 813251,-6.41709,-78.75454,Cpm Sumidero,Cutervo,no
+SALUD,Centro de Salud Chalamarca,971595506,-6.504521,-78.481803,Distrito Chalamarca,Chalamarca,no
+SALUD,Centro de Salud Cortegana,076 813445,-6.513896,-78.328748,Jr. Santa Rosa S/N,Cortegana,no
+SALUD,Centro de Salud San Antonio Bajo,945253537,-6.644951,-78.550445,Comunidad San Antonio Bajo,Bambamarca,no
+SALUD,Hospital Virgen de la Candelaria de Socota,,-6.31686,-78.693024,Jr. Eleuterio Delgado S/N - Socota,Socota,no
+SALUD,Centro de Salud Chiple,,-6.047627,-78.899229,Km. 148 Carretera Fernando Belaunde Terry,Callayuc,no
+SALUD,Centro de Salud Cachachi,987946552,-7.449726,-78.269016,Cercado Cachachi,Cachachi,no
+SALUD,Centro de Salud Simon Bolivar,,-7.155349,-78.513181,Av.Mario Urteaga Nº 500,Cajamarca,no
+SALUD,Centro de Salud la Sacilia,,-6.001959,-78.697265,Distrito la Sacilia,Toribio Casanova,no
+SALUD,Centro de Salud San Pablo,,-7.11498,-78.823404,Jr. Bahamonde Naveda S/N,San Pablo,no
+SALUD,Centro de Salud Pucara,976004768,-6.03938,-79.13071,Calle Circunvalacion S/N Pucara,Pucara,no
+SALUD,Centro de Salud la Florida,987946549,-6.870329,-79.124444,Distrito la Florida,La Florida,no
+SALUD,Centro de Salud Callayuc,,-6.183855,-78.909857,Jr. Jaen y Tupac Amaru S/N,Callayuc,no
+SALUD,Centro de Salud Moran Lirio,076 798655,-6.68262,-78.616194,Comunidad Moran Lirio,Hualgayoc,no
+SALUD,Centro de Salud Llapa,952815279,-6.979366,-78.80737,Distrito Llapa,Llapa,no
+SALUD,Centro de Salud Cujillo,,-6.107504,-78.596872,Calle Jaen,Cujillo,no
+SALUD,Centro de Salud Catache,958859883,-6.67506,-79.03582,Cll. Javier Iglesias S/N,Catache,no
+SALUD,Centro de Salud Llama,979703013,-6.51409,-79.12414,Calle Bolivar S/N,Llama,no
+SALUD,Centro de Salud Tamborapa Pueblo,976670456,-5.291164,-79.158384,Av. Grau S/N,Tabaconas,no
+SALUD,Centro de Salud Nanchoc,987946504,-6.959813,-79.241411,Distrito de Nanchoc,Nanchoc,no
+SALUD,Centro de Salud 07 de Agosto,943990159,-4.9124,-78.91477,C.P.M Caserio Siete de Agosto,San Jose de Lourdes,no
+SALUD,Centro de Salud Santo Tomas,,-6.151964,-78.683906,Jr. 2 de Diciembre S/N-Sto. Tomas,Santo Tomas,no
+SALUD,Centro de Salud la Coipa,,-5.393271,-78.905152,Cercado la Colpa,La Coipa,no
+SALUD,Centro de Salud Querocotillo,,-6.272047,-79.038523,Jr. Comercio Bajo S/N,Querocotillo,no
+SALUD,Centro de Salud Naranjito de Camse,,-6.316372,-78.908138,Cpm Naranjito de Camse,Cutervo,no
+SALUD,Centro de Salud Pomahuaca,,-5.93083,-79.229926,Calle Bolivar S/N - Pomahuaca,Pomahuaca,no
+SALUD,Centro de Salud Paccha,076 377810,-6.498964,-78.420699,Jr. Benjamin Livaque S/N,Paccha,no
+SALUD,Centro de Salud Zapotal,962632334,-5.40493,-78.68844,Comunidad de Zapotal,Huarango,no
+SALUD,Centro de Salud Ninabamba,076 749848,-6.65024,-78.78997,Distrito Ninabamba,Ninabamba,no
+SALUD,Centro de Salud Puerto Ciruelo,951962986,-5.28629,-78.80523,Comunidad Puerto Ciruelo,Huarango,no
+SALUD,Centro de Salud Conchan,972639870,-6.443178,-78.656011,Distrito Conchan,Conchan,no
+SALUD,Hospital II Cajamarca (EsSalud),076 362557,-7.159883,-78.509022,Av. Mario Urteaga No S/N,Cajamarca,no
+SALUD,Centro de Salud Jesus,,-7.246851,-78.378142,Jr. Grau Nº 652,Jesus,no
+SALUD,Centro de Salud Churuyacu,969406275,-5.419852,-79.081684,Churuyacu,Tabaconas,no
+SALUD,Centro de Salud Sto. Domingo de la Capilla,,-6.242776,-78.856917,Distrito Sto. Domingo de la Capilla,Santo Domingo de la Capilla,no
+SALUD,Centro de Salud Magdalena,,-7.250164,-78.657057,Av. Jose Chavez S/N,Magdalena,no
+SALUD,Centro de Salud Santa Cruz,998011962,-6.630679,-78.943336,Av. Zarumilla S/N,Santa Cruz,no
+SALUD,Centro de Salud San Ignacio,,-5.14467,-79.003002,Av. Abelardo Quiñones S/N,San Ignacio,no
+SALUD,Centro de Salud Huaranguillo,979880382,-5.09004,-78.82138,Cpm Huaranguillo,San Jose de Lourdes,no
+SALUD,Centro de Salud Tocmoche,952335035,-6.411979,-79.36031,Distrito Tocmoche,Tocmoche,no
+SALUD,Centro de Salud Ichocan,973583564,-7.36923,-78.13314,Av. Atahualpa S/N,Ichocan,no
+SALUD,Centro de Salud San Jose de Lourdes,990549661,-5.105572,-78.913471,Av. Ricardo Palma S/N,San Jose de Lourdes,no
+SALUD,Centro de Salud Patrona de Chota,076 849295,-6.4657,-78.73031,Ciudad de Chota,Chota,no
+SALUD,Centro de Salud Huambos,980150502,-6.452217,-78.963312,Distrito Huambos,Huambos,no
+SALUD,Centro de Salud Lluchubamba,952804312,-7.520393,-77.966796,Cercado Lluchubamba,Sitacocha,no
+SALUD,Hospital de Apoyo Celendin,,-6.86815,-78.14889,Av. Tupac Amaru S/N,Celendin,no
+SALUD,Centro de Salud Querocoto,944360833,-6.356322,-79.034761,Distrito Querocoto,Querocoto,no
+SALUD,Centro de Salud San Andres,,-6.240537,-78.708047,Carretera San Andres-Socota,San Andres de Cutervo,no
+SALUD,Centro de Salud la Pucara,989895039,-6.4292,-78.51502,Centro Poblado la Pucara,Tacabamba,no
+SALUD,Centro de Salud Cochabamba,985013309,-6.47461,-78.88927,Distrito Cochabamba,Cochabamba,no
+SALUD,Centro de Salud Llaucan,976670418,-6.747186,-78.527181,Centro Poblado Llaucan,Bambamarca,no
+SALUD,Centro de Salud Chiguirip,948771209,-6.429658,-78.720119,Jr. Micaela Bastidas S/N,Chiguirip,no
+SALUD,Centro de Salud San Juan,,-7.292345,-78.495063,Jr.El Progreso N°130,San Juan,no
+SALUD,Centro de Salud Catilluc,,-6.801649,-78.77797,Jr. los Andes N° 220,Catilluc,no
+SALUD,Centro Medico Essalud Cutervo,076 437083,-6.383081,-78.818882,Av. San Juan S/N,Cutervo,no
+SALUD,Centro de Salud la Tulpuna,987946507,-7.06213,-78.55323,Av. Alfonso Ugarte S/N,Cajamarca,no
+SALUD,Centro de Salud Ambato Tamborapa,950005822,-5.44937,-78.83384,Otros Ambato Tamborapa Distrito Bellavista Provincia Jaen Departamento Cajamarca,Bellavista,no
+SALUD,Centro de Salud el Tambo,976751983,-6.764313,-78.478264,Centro Poblado el Tambo,Bambamarca,no
+SALUD,Centro de Salud Chugur,972961256,-6.67243,-78.74139,Distrito Chugur,Chugur,no
+SALUD,Centro de Salud Baños del Inca,,-7.166032,-78.466967,Jr. Pachacutec Nº 489,Los Baños del Inca,no
+SALUD,Centro de Salud San Marcos,,-7.33618,-78.173,Av. 28 de Julio S/N,Pedro Galvez,no
+SALUD,Centro de Salud San Juan de Lacamaca,942874532,-6.642231,-78.524169,Comunidad San Juan de la Camaca,Bambamarca,no
+SALUD,Hospital de Apoyo Chota - Jose Soto Cadenillas,949822829,-6.56221,-78.65334,Jr. Exequiel Montoya Nº 718,Chota,no
+SALUD,Centro de Salud Sangana,076 730921,-6.30492,-79.29793,Comunidad Sangana,Miracosta,no
+SALUD,Centro de Salud Udima,978789377,-6.81178,-79.08665,Comunidaad Udima,Catache,no
+SALUD,Hospital Bambamarca - Tito Villar Cabezas,959607965,-6.671111,-78.528949,Jr. Ricardo Palma,Bambamarca,no
+SALUD,Centro de Salud Huabal,,-5.612133,-78.899635,Comunidad de Huabal,Huabal,no
+SALUD,Hospital de Apoyo Cajabamba,076 551099,-7.636379,-78.047621,Jr. la Torre Nº 277,Cajabamba,no
+SALUD,Hospital II Clinica Jaen (EsSalud),076 431271,-5.713447,-78.800831,Calle Mariano Melgar Nº 192- Urb. Santa Beatriz,Jaen,no
+SALUD,Centro de Salud Sillangate,,-6.209753,-78.992994,Cpm Sillangate,Querocotillo,no
+SALUD,Centro de Salud Yauyucan,969168124,-6.678673,-78.818114,Distrito Yauyucan,Yauyucan,no
+SALUD,Centro de Salud Magllanal,,-5.707647,-78.817266,Calle Calle las Almendra Cdra. 4 S/N Número S/N Distrito Jaen Provincia Jaen Departamento Cajamarca,Jaen,no
+SALUD,Centro de Salud las Pirias de Jaen,,-5.627073,-78.852416,Plaza de Armas Pirias S/N,Las Pirias,no
+SALUD,Centro de Salud Apangoya,968246614,-4.79201,-78.72683,Cpm Apangoya,San Jose de Lourdes,no
+SALUD,Centro de Salud Chirinos,945171916,-5.30593,-78.90255,Otros Alto Peru S/N Número S/N Distrito Chirinos Provincia San Ignacio Departamento Cajamarca,Chirinos,no
+SALUD,Centro de Salud Angash,975386087,-5.509243,-79.009882,Otros Cpm Angash Distrito San Jose del Alto Provincia Jaen Departamento Cajamarca,San Jose del Alto,no
+SALUD,Hospital Santa Maria de Cutervo,,-6.379825,-78.815474,Jr. el Inca S/N-Cutervo,Cutervo,no
+SALUD,Centro de Salud Chambamontera,,-5.854051,-78.912962,Comunidad de Chambamontera,Jaen,no
+SALUD,Centro de Salud Nuevo Oriente,,-6.373742,-78.809393,Localidad Nuevo Oriente,Cutervo,no
+SALUD,Centro de Salud Bajo Ihuamaca,948127001,-5.175268,-79.07981,Comunidad Bajo Ihuamaca,San Ignacio,no
+SALUD,Centro de Salud la Ramada de Llama,942246638,-6.629782,-79.298351,Centro Poblado la Ramada de Llama,Llama,no
+SALUD,Centro de Salud San Luis de la Lucma,,-6.292044,-78.607471,Carretera Lucma Socota,San Luis de Lucma,no
+SALUD,Centro de Salud Tembladera,952810594,-7.253476,-79.127469,Jr. San Martin 340-Tembladera,Yonan,no
+SALUD,Centro de Salud Namballe,988288037,-5.004646,-79.087494,Avenida Av. Binacional Namballe Distrito Namballe Provincia San Ignacio Departamento Cajamarca,Namballe,no
+SALUD,Centro de Salud Chontali,951958679,-5.644932,-79.08562,Calle Calle Alfonso Ugarte S/N Número S/N Distrito Chontali Provincia Jaen Departamento Cajamarca,Chontali,no
+SALUD,Centro de Salud Chunchuquillo,943893548,-5.85323,-79.00122,Otros Comunidad de Chunchuquillo Distrito Colasay Provincia Jaen Departamento Cajamarca,Colasay,no
+SALUD,Centro de Salud Santa Rosa,921929703,-5.431633,-78.56805,Calle Calle Armando Artola S/N Número S/N Distrito Santa Rosa Provincia Jaen Departamento Cajamarca,Santa Rosa,no
+SALUD,Centro de Salud el Porvenir de Huarango,945726014,-5.16398,-78.75058,Otros Distrito el Huarango Distrito Huarango Provincia San Ignacio Departamento Cajamarca,Huarango,no
+SALUD,Centro de Salud San Pedro de Perico,976653531,-5.33886,-78.79699,Otros Comunidad de San Pedro Distrito Chirinos Provincia San Ignacio Departamento Cajamarca,Chirinos,no
+SALUD,Centro de Salud las Pirias,996137824,-5.2474,-78.94177,Otros Cpm las Pirias Distrito Chirinos Provincia San Ignacio Departamento Cajamarca,Chirinos,no
+SALUD,Centro de Salud Morro Solar,076 431407,-5.7106,-78.81192,Otros Alfredo Bastos Nº 630 Distrito Jaen Provincia Jaen Departamento Cajamarca,Jaen,no
+SALUD,Centro de Salud Cruce Shumba,973918961,-5.55487,-78.80645,Otros Comunidad de Cruce Shumba Distrito Bellavista Provincia Jaen Departamento Cajamarca,Bellavista,no
+SALUD,Centro de Salud Colasay,948457734,-5.978861,-79.068615,Calle Calle Santa Rosa S/N Número S/N Distrito Colasay Provincia Jaen Departamento Cajamarca,Colasay,no
+SALUD,Centro de Salud San Felipe,948457734,-5.770258,-79.312835,Otros Comunidad San Felipe Distrito San Felipe Provincia Jaen Departamento Cajamarca,San Felipe,no
+SALUD,Centro de Salud Santa Cruz de Cutervo,,-6.094949,-78.853374,Distrito Santa Cruz de Cutervo,Santa Cruz,no
+SALUD,Hospital Gral. Jaen,076 431268,-5.706214,-78.804711,Avenida Av. Pakamauros S/N S/N Av. Pakamauros S/N Jaen Jaen Cajamarca,Jaen,no
+SALUD,Centro de Salud Puentecillos,961043088,-5.41009,-78.58698,Carretera Santa Rosa,Santa Rosa,no
+SALUD,Centro de Salud Huarango,,-5.27258,-78.775347,Distrito de el Huarango,Huarango,no

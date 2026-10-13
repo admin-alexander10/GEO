@@ -1,0 +1,115 @@
+﻿tipo,nombre,telefono,latitud,longitud,direccion,distrito,ubicacion_aproximada
+COMISARIA,"Comisaría PNP Central Cajamarca ""A""",980122993,-7.155349,-78.513181,"Jr. Amalia Puga N° 1111, Cajamarca - Cajamarca",Cajamarca,si
+COMISARIA,"Comisaría PNP Rural Sectorial Baños del Inca ""B""",957686547,-7.166032,-78.466967,"Jr. Yahuarhuaca 207, Los Baños del Inca - Cajamarca Cajamarca",Los Baños del Inca,si
+COMISARIA,"Comisaría PNP Rural San Juan ""E""",957687104,-7.292345,-78.495063,"Jr. Sucre S/N (Esquina Con Unión), San Juan Cajamarca - Cajamarca",San Juan,si
+COMISARIA,"Comisaría PNP Rural Namora ""D""",957686775,-7.202837,-78.323324,"Av. 14 de Agosto S/N Plaza Principal, Namora Cajamarca - Cajamarca",Namora,si
+COMISARIA,"Comisaría PNP Rural Chanta Alta ""E""",945295386,-6.862996,-78.481613,"Jr. Marañón S/N, Centro Poblado Chanta Alta Encañada – Cajamarca - Cajamarca",Encañada,si
+COMISARIA,"Comisaría PNP Rural La Encañada ""D""",957686589,-7.086015,-78.343612,"Jr. Lima 656, Encañada – Cajamarca - Cajamarca",Encañada,si
+COMISARIA,"Comisaría PNP Rural Magdalena ""D""",957686645,-7.250164,-78.657057,"Av. Jorge Chávez N° 970, Magdalena - Cajamarca Cajamarca",Magdalena,si
+COMISARIA,"Comisaría PNP Rural Jesús ""D""",957686482,-7.246851,-78.378142,"Jr. Montero S/N, Jesús – Cajamarca - Cajamarca",Jesus,si
+COMISARIA,"Comisaría PNP Rural Asunción ""E""",957686547,-7.325364,-78.518526,"Jr. Puno 353, Asunción – Cajamarca – Cajamarca",Asuncion,si
+COMISARIA,"Comisaría PNP Rural Matara ""E""",957686707,-7.25651,-78.26372,"Av. Gonzalo Pacifico Cabrera 298, Matara Cajamarca - Cajamarca",Matara,si
+COMISARIA,"Comisaría PNP Rural Cospan ""E""",957686561,-7.426715,-78.542951,"Plaza de Armas, Cospan – Cajamarca - Cajamarca",Cospan,si
+COMISARIA,"Comisaría PNP Sectorial San Marcos ""B""",980122204,-7.33618,-78.173,"Jr. Inclán N° 141, Pedro Gálvez – San Marcos Cajamarca",Pedro Galvez,si
+COMISARIA,"Comisaría PNP Rural Ichocan ""E""",966831126,-7.36923,-78.13314,"Gonzales Prada N° 376, Ichocan – San Marcos Cajamarca",Ichocan,si
+COMISARIA,"Comisaría PNP Rural José Sabogal ""D""",957687044,-7.251597,-78.037336,"Jr. El Maestro S/N, Plaza de Armas, José Sabogal San Marcos - Cajamarca",Jose Sabogal,si
+COMISARIA,"Comisaría PNP Rural Eduardo Villanueva – La Grama ""D""",,-7.464326,-78.128788,"Av. Circunvalación N° 400, La Grama Eduardo Villanueva – San Marcos - Cajamarca",Eduardo Villanueva,si
+COMISARIA,"Comisaría PNP Sectorial Cajabamba ""A""",945298709,-7.636379,-78.047621,"Av. Leoncio Martínez Vereau N° 341, Cajabamba Cajabamba - Cajamarca",Cajabamba,si
+COMISARIA,"Comisaría PNP Rural LLuchubamba ""E""",957686832,-7.520393,-77.966796,"Jr. 28 de Julio N° 280, Lluchubamba – Sitacocha Cajabamba - Cajamarca",Sitacocha,si
+COMISARIA,"Comisaría PNP Rural Cauday ""E""",957686891,-7.575341,-78.070521,"Av. 11 de Febrero 268, Cauday – Condebamba Cajabamaba - Cajamarca",Condebamba,si
+COMISARIA,"Comisaría PNP Rural Cachachi ""E""",,-7.449726,-78.269016,"Jr. Comercio S/N, Cachachi – Cajabamba Cajamarca",Cachachi,si
+COMISARIA,"Comisaría PNP Rural Algamarca ""E""",,-7.607261,-78.246737,"Frente a la Plaza de Armas, Cachachi - Cajabamba Cajamarca",Cachachi,si
+COMISARIA,"Comisaría PNP Rural Chuquibamba ""D""",957815709,-7.633924,-78.140748,Jr. Camino Real S/N- Centro Poblado Chuquibamba Cachachi – Cajabamba - Cajamarca,Cachachi,si
+COMISARIA,"Comisaría PNP Sectorial Celendín ""A""",943883740,-6.86815,-78.14889,"Av. Cajamarca S/N Barrio Sevilla, Celendín - Celendín Cajamarca",Celendin,si
+COMISARIA,"Comisaría PNP Rural Sucre ""D""",,-6.939616,-78.135145,"Av. Clodomiro Chávez N° 380, Sucre - Celendín Cajamarca",Sucre,si
+COMISARIA,"Comisaría PNP Rural Huasmin ""E""",957687107,-6.837962,-78.243999,"Jr. Junín N° 025, Huasmin – Celendín - Cajamarca",Huasmin,si
+COMISARIA,"Comisaría PNP Rural Sorochuco ""D""",,-6.91,-78.252217,"Jr. Tarapacá N° 206, Sorochuco – Celendín Cajamarca",Sorochuco,si
+COMISARIA,"Comisaría PNP Rural Miguel Iglesias ""E""",957687072,-6.649784,-78.231797,"Jr. Atahualpa N° 390, Miguel Iglesias - Celendín Cajamarca",Miguel Iglesias,si
+COMISARIA,"Comisaría PNP Rural Oxamarca ""E""",,-7.041138,-78.06867,"Jr. Bartolomé Diaz S/N, Oxamarca - Celendin Cajamarca",Oxamarca,si
+COMISARIA,"Comisaría PNP Rural Chumuch ""E""",945249775,-6.603466,-78.198371,"Jr. José Quispe Linares S/N, Chumuch - Celendín Cajamarca",Chumuch,si
+COMISARIA,"Comisaría PNP Rural Cortegana ""E""",,-6.513896,-78.328748,"Plaza de Armas, Cortegana – Celendín - Cajamarca",Cortegana,si
+COMISARIA,"Comisaría PNP Sectorial San Miguel ""B""",966830877,-6.99998,-78.85382,"Jr. Bolognesi N° 465, San Miguel – San Miguel Cajamarca",San Miguel,si
+COMISARIA,"Comisaría PNP Rural San Pablo ""D""",957685741,-7.11498,-78.823404,"Av. 13 de Julio N° 306, San Pablo – San Pablo Cajamarca",San Pablo,si
+COMISARIA,"Comisaría PNP Rural Catiluc ""E""",,-6.801649,-78.77797,"Jr. Bambamarca N° 539, Catilluc – San Miguel Cajamarca",Catilluc,si
+COMISARIA,"Comisaría PNP Rural Agua Blanca ""E""",,-7.044686,-79.060909,"Calle Apolinario Alvitez N° 181, Unión Agua Blanca San Miguel - Cajamarca",Union Agua Blanca,si
+COMISARIA,"Comisaría PNP Rural El Prado ""E""",,-7.033193,-79.00941,"Calle German Luna Yglesias N° 298, El Prado San Miguel - Cajamarca",El Prado,si
+COMISARIA,"Comisaría PNP Rural San Gregorio ""E""",957689711,-7.05743,-79.09775,"Jr. Chepén N° 007, San Gregorio – San Miguel Cajamarca",San Gregorio,si
+COMISARIA,"Comisaría PNP Rural Calquis ""E""",957687366,-6.97879,-78.8517,"Jr. San José N° 233, Calquis – San Miguel -Cajamarca",Calquis,si
+COMISARIA,"Comisaría PNP Rural LLapa ""E""",,-6.979366,-78.80737,"Av. San Andrés Nº 730-740, LLapa – San Miguel Cajamarca",Llapa,si
+COMISARIA,"Comisaría PNP Rural Tongod ""E""",,-6.76306,-78.82383,"Jr. Bolognesi N° 230 – 240, Tongod – San Miguel Cajamarca",Tongod,si
+COMISARIA,"Comisaría PNP Rural Niepos ""D""",,-6.926729,-79.128402,"Calle Huáscar N° 120, Niepos – San Miguel - Cajamarca",Niepos,si
+COMISARIA,"Comisaría PNP Rural Bolívar ""D""",980122300,-6.97723,-79.1791,"Jr. San Martin N° 247, Bolívar – San Miguel - Cajamarca",Bolivar,si
+COMISARIA,"Comisaría PNP Rural Nanchoc ""D""",,-6.959813,-79.241411,"Jr. Bolognesi S/N, Nanchoc – San Miguel – Cajamarca",Nanchoc,si
+COMISARIA,"Comisaría PNP Rural Lanchez ""D""",,-6.934013,-79.088341,"Jr. Bolognesi S/N, Niepos – San Miguel - Cajamarca",Niepos,si
+COMISARIA,"Comisaría PNP Rural La Florida ""D""",,-6.870329,-79.124444,"Calle Mariscal Castilla N° 106, La Florida - San Miguel Cajamarca",La Florida,si
+COMISARIA,"Comisaría PNP Sectorial Contumaza ""C""",957687273,-7.366429,-78.808,"Jr. Mariano Melgar S/N. Cdra. 01, Contumaza Contumaza - Contumaza",Contumaza,si
+COMISARIA,"Comisaría PNP Rural Guzmango ""E""",,-7.384092,-78.896798,"Jr. Cajamarca N°.101, Guzmango - Contumaza Cajamarca",Guzmango,si
+COMISARIA,"Comisaría PNP Rural San Benito ""E""",,-7.427758,-78.92763,"Jr. Silvino Alva S/N, San Benito – Contumaza Cajamarca",San Benito,si
+COMISARIA,"Comisaría PNP Rural Tantarica – Catan ""E""",,-7.299914,-78.932574,"Jr. Jucon S/N Cdra.01, Tantarica – Contumaza Cajamarca",Tantarica,si
+COMISARIA,"Comisaría PNP Rural Santa Cruz Toledo ""E""",,-7.345264,-78.836876,"Jr. Fidel Zarate Plasencia S/N, Santa Cruz Toledo Contumaza - Cajamarca",Santa Cruz de Toledo,si
+COMISARIA,"Comisaría PNP Sectorial Santa Cruz ""B""",980122398,-6.630679,-78.943336,"Jr. Alfonso Ugarte Nº 220, Santa Cruz – Santa Cruz Cajamarca",Santa Cruz,si
+COMISARIA,"Comisaría PNP Rural Chancay Baños ""E""",942891089,-6.575338,-78.86655,"Av. 13 Junio S/N, Chancay Baños – Santa Cruz Cajamarca",Chancaybaños,si
+COMISARIA,"Comisaría PNP Rural Pulan ""E""",957805919,-6.73994,-78.92323,"Av. Cajamarca Nº 307, Pulan – Santa Cruz Cajamarca",Pulan,si
+COMISARIA,"Comisaría PNP Rural Yauyucan ""E""",957805773,-6.678673,-78.818114,"Av. Cajamarca S/N, Yauyucan – Santa Cruz Cajamarca",Yauyucan,si
+COMISARIA,"Comisaría PNP Rural Uticyacu ""E""",,-6.606021,-78.794564,"Jr. Dos de Mayo S/N, Uticyacu – Santa Cruz Cajamarca",Uticyacu,si
+COMISARIA,"Comisaría PNP Rural Ninabamba ""E""",957805561,-6.65024,-78.78997,"Calle Manuel A. Odría S/N, Ninabamba – Santa Cruz Cajamarca",Ninabamba,si
+COMISARIA,"Comisaría PNP Rural Andabamba ""E""",957805300,-6.66291,-78.81947,"Av. Cajamarca S/N, Andabamba – Santa Cruz Cajamarca",Andabamba,si
+COMISARIA,"Comisaría PNP Rural Catache ""E""",957805012,-6.67506,-79.03582,"Calle Manuel Francisco Burga Nº 710, Catache Santa Cruz - Cajamarca",Catache,si
+COMISARIA,"Comisaría PNP Rural Udima ""E""",,-6.81178,-79.08665,"Calle San Cristóbal S/N, Catache – Santa Cruz Cajamarca",Catache,si
+COMISARIA,"Comisaría PNP Rural Sectorial Tembladera ""C""",957686557,-7.253476,-79.127469,"Jr. Buenos Aires S/N, Tembladera – Yonan - Contumaza Cajamarca",Yonan,si
+COMISARIA,"Comisaría PNP Rural Chilete ""E""",957687452,-7.220422,-78.840105,"Jr. Ferrocarril S/N, Chilete – Contumaza - Cajamarca",Chilete,si
+COMISARIA,"Comisaría PNP Rural Trinidad ""E""",945308859,-7.348024,-79.026515,"Jr. Plaza N° 227, Trinidad – Cupisnique - Contumaza Cajamarca",Cupisnique,si
+COMISARIA,"Comisaría PNP Sectorial Chota ""A""",957687031,-6.56221,-78.65334,"Av. Inca Garcilaso de La Vega N° 724, Chota Chota - Cajamarca",Chota,si
+COMISARIA,"Comisaría PNP Rural Cochabamba ""D""",957687330,-6.47461,-78.88927,"Jr. Cajamarca 335, Cochabamba – Chota Cajamarca",Cochabamba,si
+COMISARIA,"Comisaría PNP Rural Huambos ""E""",957687383,-6.452217,-78.963312,"Jr. Simón Bolívar S/N, Plaza de Armas, Huambos Chota - Cajamarca",Huambos,si
+COMISARIA,"Comisaría PNP Rural Paccha ""E""",,-6.498964,-78.420699,"Centro Poblado Paccha, Paccha – Chota - Cajamarca",Paccha,si
+COMISARIA,"Comisaría PNP Rural Lajas ""E""",957687400,-6.56168,-78.73913,"Av. Chiclayo N° 382, Lajas – Chota - Cajamarca",Lajas,si
+COMISARIA,"Comisaría PNP Rural Querocoto ""E""",,-6.356322,-79.034761,"Jr. Comercio S/N, Querocoto- Chota – Cajamarca",Querocoto,si
+COMISARIA,"Comisaría PNP Rural Llama ""D""",,-6.51409,-79.12414,"Calle Simón Bolívar N° 111, Llama – Chota - Cajamarca",Llama,si
+COMISARIA,Comisaría PNP Rural Miracosta,,-6.403759,-79.284715,"Calle Señor de Los Milagros N° 2002, Miracosta - Chota Cajamarca",Miracosta,si
+COMISARIA,"Comisaría PNP Rural Tocmoche ""D""",,-6.411979,-79.36031,"Calle Santa Rosa S/N, Tocmoche – Chota - Cajamarca",Tocmoche,si
+COMISARIA,"Comisaría PNP Rural San Juan de Licupis ""D""",,-6.424372,-79.241862,"Calle David Gástelo S/N, San Juan de Licupis - Chota Cajamarca",San Juan de Licupis,si
+COMISARIA,"Comisaría PNP Rural Tacabamba ""D""",957687344,-6.39329,-78.61268,"Jr. 28 de Julio S/N, Tacabamba – Chota - Cajamarca",Tacabamba,si
+COMISARIA,"Comisaría PNP Rural Chalamarca ""E""",,-6.504521,-78.481803,"Jr. Jorge Berrios Alarcón Cuadra 4, Chalamarca - Chota Cajamarca",Chalamarca,si
+COMISARIA,"Comisaría PNP Rural Conchan ""E""",,-6.443178,-78.656011,"Jr. Comercio S/N, Conchan – Chota - Cajamarca",Conchan,si
+COMISARIA,"Comisaría PNP Rural Chiguirip ""E""",,-6.429658,-78.720119,"Av. Micaela Bastidas S/N, Chiguirip – Chota Cajamarca",Chiguirip,si
+COMISARIA,"Comisaría PNP Rural Anguia ""E""",,-6.341027,-78.606175,"Jr. Cajamarca Cuadra 2, Anguia – Chota - Cajamarca",Anguia,si
+COMISARIA,"Comisaría PNP Rural Chimban ""E""",,-6.251889,-78.477944,"Jr. Tupac Amaru S/N, Chimban – Chota - Cajamarca",Chimban,si
+COMISARIA,"Comisaría PNP Sectorial Cutervo ""A""",980122239,-6.379825,-78.815474,"Jr. Comercio N° 1097, Cutervo – Cutervo - Cajamarca",Cutervo,si
+COMISARIA,"Comisaría PNP Rural Santo Tomas ""E""",957827659,-6.151964,-78.683906,"Plaza de Armas Santo Tomas, Santo Tomas - Cutervo Cajamarca",Santo Tomas,si
+COMISARIA,"Comisaría PNP Rural La Ramada ""E""",,-6.21138,-78.55653,"Plaza de Armas La Ramada, La Ramada - Cutervo Cajamarca",La Ramada,si
+COMISARIA,"Comisaría PNP Rural La Capilla ""E""",957687927,-6.242776,-78.856917,"Jr. Comercio S/N, La Capilla - Santo Domingo de la Capilla – Cutervo - Cajamarca",Santo Domingo de la Capilla,si
+COMISARIA,"Comisaría PNP Rural Socota ""A""",,-6.31686,-78.693024,"Jr. Cutervo S/N, Socota – Cutervo - Cajamarca",Socota,si
+COMISARIA,"Comisaría PNP Rural Callayuc ""C""",,-6.183855,-78.909857,"Calle Comercio S/N, Cercado, Callayuc - Cutervo Cajamarca",Callayuc,si
+COMISARIA,"Comisaría PNP Rural Querocotillo ""E""",945307039,-6.272047,-79.038523,"Calle Arequipa Bajo N° 352, Querocotillo – Cutervo Cajamarca",Querocotillo,si
+COMISARIA,"Comisaría PNP Rural San Andrés ""E""",959677144,-6.240537,-78.708047,"Jr. Cesar Vallejo S/N, San Andrés de Cutervo - Cutervo Cajamarca",San Andres de Cutervo,si
+COMISARIA,"Comisaría PNP Rural Santa Cruz de Cutervo ""E""",,-6.094949,-78.853374,"Jr. Cajamarca Cuadra 2, Santa Cruz – Cutervo Cajamarca",Santa Cruz,si
+COMISARIA,"Comisaría PNP Rural Sinchimache ""E""",,-6.283643,-78.961043,"Centro Poblado Sinchimache, Cutervo - Cutervo Cajamarca",Cutervo,si
+COMISARIA,"Comisaría PNP Rural Libertad Naranjito de Camse ""E""",957818038,-6.316372,-78.908138,"Centro Poblado Camse, Cutervo – Cutervo Cajamarca",Cutervo,si
+COMISARIA,"Comisaría PNP Rural Pimpingos ""D""",957804235,-6.060707,-78.756689,"Plaza de Armas, Pimpingos – Cutervo - Cajamarca",Pimpingos,si
+COMISARIA,"Comisaría PNP Rural San Juan de Cutervo ""E""",966835113,-6.164306,-78.597963,"Plaza de Armas, San Juan de Cutervo – Cutervo Cajamarca",San Juan de Cutervo,si
+COMISARIA,"Comisaría PNP Rural Choros ""D""",,-5.902896,-78.69578,"Plaza de Armas, Choros – Cutervo - Cajamarca",Choros,si
+COMISARIA,"Comisaría PNP Rural La Sacilia ""E""",,-6.001959,-78.697265,"Cercado La Sacilia, Toribio Casanova - Cutervo Cajamarca",Toribio Casanova,si
+COMISARIA,"Comisaría PNP Sectorial Hualgayoc – Bambamarca ""B""",957687211,-6.671111,-78.528949,"Jr. Jaime de Martínez N° 132, Bambamarca - Hualgayoc Cajamarca",Bambamarca,si
+COMISARIA,"Comisaría PNP Rural Hualgayoc ""D""",957666737,-6.766555,-78.607603,"Jr. San Martin S/N, Hualgayoc – Hualgayoc - Cajamarca",Hualgayoc,si
+COMISARIA,"Comisaría PNP Rural Llaucan ""E""",,-6.747186,-78.527181,"Jr. San Pedro S/N, Bambamarca – Hualgayoc Cajamarca",Bambamarca,si
+COMISARIA,"Comisaría PNP Rural Chugur ""E""",966835399,-6.67243,-78.74139,"Jr. Progreso S/N, Chugur – Hualgayoc - Cajamarca",Chugur,si
+COMISARIA,"Comisaría PNP Rural Jaén ""A""",957686290,-5.713447,-78.800831,"Av. Mesones Muro N° 109, Jaén – Jaén - Cajamarca",Jaen,si
+COMISARIA,"Comisaría PNP Rural Santa Rosa de la Yunga ""E""",966835089,-5.431633,-78.56805,"Av. Bracamoros S/N, Santa Rosa – Jaén - Cajamarca",Santa Rosa,si
+COMISARIA,"Comisaría PNP Rural Las Pirias ""E""",957803417,-5.627073,-78.852416,"Calle Alipio Ponce S/N. Lote 9. Mz. H, Las Pirias – Jaén Cajamarca",Las Pirias,si
+COMISARIA,"Comisaría PNP Rural Chamaya ""D""",,-5.83173,-78.74859,Av. Arana Vidal S/N – Centro Poblado Chamaya - Jaén Jaén - Cajamarca,Jaen,si
+COMISARIA,"Comisaría PNP Rural Sectorial Bellavista ""B""",957803611,-5.663443,-78.677192,Av. Mesones Muro N° 231 – Bellavista – Jaen Cajamarca,Bellavista,si
+COMISARIA,"Comisaría PNP Rural Huabal ""E""",957803502,-5.612133,-78.899635,"Calle Federico Vidarreal N°318, Huabal – Jaen Cajamarca",Huabal,si
+COMISARIA,"Comisaría PNP Rural Sectorial san Ignacio ""B""",957804309,-5.14467,-79.003002,"Av. San Ignacio S/N, San Ignacio – San Ignacio Cajamarca",San Ignacio,si
+COMISARIA,"Comisaría PNP Rural Tamborapa ""D""",,-5.44937,-78.83384,"Av. Perú S/N - Carretera Jaén - San Ignacio, Bellavista Jaén - Cajamarca",Bellavista,si
+COMISARIA,"Comisaría PNP Puerto Ciruelo ""C""",966835482,-5.28629,-78.80523,"Calle San José S/N, Huarango – San Ignacio Cajamarca",Huarango,si
+COMISARIA,"Comisaría PNP Rural San José de Lourdes ""D""",,-5.105572,-78.913471,"Jr. Tacna S/N, San José de Lourdes – San Ignacio Cajamarca",San Jose de Lourdes,si
+COMISARIA,"Comisaría PNP Rural Chirinos ""D""",957804309,-5.30593,-78.90255,"Av. San Ignacio S/N, Chirinos – San Ignacio Cajamarca",Chirinos,si
+COMISARIA,"Comisaría PNP Rural Namballe ""D""",,-5.004646,-79.087494,"Jr. Haya de la Torre S/N, Namballe – San Ignacio Cajamarca",Namballe,si
+COMISARIA,"Comisaría PNP Rural Tabaconas ""D""",,-5.316363,-79.28306,"Calle Cayonas S/N, Namballe – San Ignacio Cajamarca",Tabaconas,si
+COMISARIA,"Comisaría PNP Rural Sectorial Pucara ""B""",966835368,-6.03938,-79.13071,"Av. Jaén S/N, Pucara – Jaén - Cajamarca",Pucara,si
+COMISARIA,"Comisaría PNP Rural Pomahuaca ""E""",957803359,-5.93083,-79.229926,"Calle Balta S/N, Pomahuaca – Jaén - Cajamarca",Pomahuaca,si
+COMISARIA,"Comisaría PNP San Felipe ""D""",,-5.770258,-79.312835,"Calle San Martin S/N, San Felipe – Jaén - Cajamarca",San Felipe,si
+COMISARIA,"Comisaría PNP Rural Sallique ""E""",,-5.656203,-79.31578,"Calle Grau S/N, Sallique – Jaén - Cajamarca",Sallique,si
+COMISARIA,"Comisaría PNP Rural Chontali ""D""",957804192,-5.644932,-79.08562,"Frente a La Plaza de Armas, Chontali – Jaen Cajamarca",Chontali,si
+COMISARIA,"Comisaría PNP Rural Colasay ""E""",957803985,-5.978861,-79.068615,"Calle San Martin S/N, Colasay – Jaén - Cajamarca",Colasay,si

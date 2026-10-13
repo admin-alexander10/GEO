@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <!-- Filtros de resplandor / Glow Tech -->
+    <filter id="glow-red" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-cyan" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <filter id="glow-core" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Gradientes de color -->
+    <linearGradient id="grad-red" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff4d6d" />
+      <stop offset="45%" stop-color="#ef4444" />
+      <stop offset="100%" stop-color="#991b1b" />
+    </linearGradient>
+
+    <linearGradient id="grad-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#67e8f9" />
+      <stop offset="50%" stop-color="#0ea5e9" />
+      <stop offset="100%" stop-color="#0369a1" />
+    </linearGradient>
+
+    <linearGradient id="grad-orbit-cyan" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.95" />
+      <stop offset="50%" stop-color="#0284c7" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.95" />
+    </linearGradient>
+
+    <linearGradient id="grad-orbit-red" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f43f5e" stop-opacity="0.95" />
+      <stop offset="50%" stop-color="#be123c" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#f43f5e" stop-opacity="0.95" />
+    </linearGradient>
+
+    <radialGradient id="bg-radial" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.9" />
+      <stop offset="60%" stop-color="#0a101d" stop-opacity="0.98" />
+      <stop offset="100%" stop-color="#030712" />
+    </radialGradient>
+
+    <style>
+      @keyframes pulse-beacon {
+        0%, 100% { transform: scale(1); opacity: 0.9; }
+        50% { transform: scale(1.05); opacity: 1; }
+      }
+      @keyframes ecg-shine {
+        0%, 100% { stroke: #ffffff; filter: drop-shadow(0 0 2px #38bdf8); }
+        50% { stroke: #cffafe; filter: drop-shadow(0 0 6px #06b6d4); }
+      }
+      .anim-rescue-cross {
+        transform-origin: 100px 100px;
+        animation: pulse-beacon 3s ease-in-out infinite;
+      }
+      .anim-ecg {
+        animation: ecg-shine 2s ease-in-out infinite;
+      }
+    </style>
+  </defs>
+
+  <!-- 1. Base Circular Tecnológica con Escudo -->
+  <circle cx="100" cy="100" r="92" fill="url(#bg-radial)" stroke="#334155" stroke-width="2" />
+  <circle cx="100" cy="100" r="88" fill="none" stroke="#1e293b" stroke-width="1.5" stroke-dasharray="4 4" />
+
+  <!-- 2. Anillos exteriores de Radar y Coordenadas -->
+  <circle cx="100" cy="100" r="78" fill="none" stroke="#0ea5e9" stroke-opacity="0.35" stroke-width="1" />
+  <circle cx="100" cy="100" r="66" fill="none" stroke="#ef4444" stroke-opacity="0.25" stroke-width="1" stroke-dasharray="6 3" />
+
+  <!-- 3. Globo Geoespacial Digital (Malla PostGIS / Lat & Lon) -->
+  <g opacity="0.5">
+    <circle cx="100" cy="100" r="54" fill="none" stroke="#38bdf8" stroke-width="1.2" />
+    <!-- Meridianos Curvos -->
+    <ellipse cx="100" cy="100" rx="36" ry="54" fill="none" stroke="#38bdf8" stroke-width="0.9" stroke-opacity="0.7" />
+    <ellipse cx="100" cy="100" rx="18" ry="54" fill="none" stroke="#38bdf8" stroke-width="0.9" stroke-opacity="0.7" />
+    <line x1="100" y1="46" x2="100" y2="154" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.6" stroke-dasharray="2 2" />
+    <!-- Paralelos Curvos -->
+    <line x1="46" y1="100" x2="154" y2="100" stroke="#38bdf8" stroke-width="1" stroke-opacity="0.6" stroke-dasharray="2 2" />
+    <ellipse cx="100" cy="80" rx="49" ry="14" fill="none" stroke="#38bdf8" stroke-width="0.8" stroke-opacity="0.6" />
+    <ellipse cx="100" cy="120" rx="49" ry="14" fill="none" stroke="#38bdf8" stroke-width="0.8" stroke-opacity="0.6" />
+  </g>
+
+  <!-- 4. Órbita Cuántica 3 (Vertical de soporte) -->
+  <g transform="rotate(90 100 100)" opacity="0.35">
+    <ellipse cx="100" cy="100" rx="72" ry="20" fill="none" stroke="#818cf8" stroke-width="1" stroke-dasharray="3 3" />
+  </g>
+
+  <!-- 5. Órbitas Cuánticas Principales con Nodos de Energía -->
+  <!-- Órbita 1: Cyan (-32°) -->
+  <g transform="rotate(-32 100 100)">
+    <ellipse cx="100" cy="100" rx="75" ry="26" fill="none" stroke="url(#grad-orbit-cyan)" stroke-width="2.2" filter="url(#glow-cyan)" />
+    <!-- Nodos cuánticos (electrones) -->
+    <circle cx="25" cy="100" r="3.5" fill="#38bdf8" filter="url(#glow-cyan)" />
+    <circle cx="175" cy="100" r="3.5" fill="#38bdf8" filter="url(#glow-cyan)" />
+    <circle cx="100" cy="74" r="2" fill="#7dd3fc" opacity="0.8" />
+    <circle cx="100" cy="126" r="2" fill="#7dd3fc" opacity="0.8" />
+  </g>
+
+  <!-- Órbita 2: Rojo Emergencia (+32°) -->
+  <g transform="rotate(32 100 100)">
+    <ellipse cx="100" cy="100" rx="75" ry="26" fill="none" stroke="url(#grad-orbit-red)" stroke-width="2.2" filter="url(#glow-red)" />
+    <!-- Nodos cuánticos -->
+    <circle cx="25" cy="100" r="3.5" fill="#f43f5e" filter="url(#glow-red)" />
+    <circle cx="175" cy="100" r="3.5" fill="#f43f5e" filter="url(#glow-red)" />
+    <circle cx="100" cy="74" r="2" fill="#fda4af" opacity="0.8" />
+    <circle cx="100" cy="126" r="2" fill="#fda4af" opacity="0.8" />
+  </g>
+
+  <!-- 6. Núcleo de Rescate: Cruz de Emergencia & Pulso Sísmico -->
+  <g class="anim-rescue-cross">
+    <!-- Cruz Roja de Emergencia con borde estilizado -->
+    <g filter="url(#glow-red)">
+      <path d="M 91 74
+               H 109
+               V 91
+               H 126
+               V 109
+               H 109
+               V 126
+               H 91
+               V 109
+               H 74
+               V 91
+               H 91
+               Z"
+            fill="url(#grad-red)"
+            stroke="#ffe4e6"
+            stroke-width="1.5"
+            stroke-linejoin="round" />
+    </g>
+
+    <!-- Línea Vital Sísmica / Pulso ECG (Detección inercial y signos de vida) -->
+    <path class="anim-ecg"
+          d="M 76 100 H 87 L 91 91 L 96 110 L 102 88 L 107 106 L 111 98 L 114 100 H 124"
+          fill="none"
+          stroke="#ffffff"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round" />
+
+    <!-- Epicentro / Beacon de Coordenada Cero -->
+    <circle cx="100" cy="100" r="2.8" fill="#ffffff" filter="url(#glow-core)" />
+  </g>
+
+  <!-- 7. Retícula Táctica y Miras de Radar Perimetral -->
+  <path d="M 100 10 V 22 M 100 178 V 190 M 10 100 H 22 M 178 100 H 190" stroke="#38bdf8" stroke-width="1.8" stroke-linecap="round" opacity="0.7" />
+  <circle cx="100" cy="100" r="4" fill="none" stroke="#ef4444" stroke-width="1" opacity="0.5" />
+</svg>
