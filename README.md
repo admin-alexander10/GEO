@@ -66,6 +66,7 @@ Copia el archivo de ejemplo y ajusta tus credenciales de PostgreSQL:
 ```powershell
 copy .env.example .env
 ```
+Configura `ALLOWED_ORIGINS` como una lista separada por comas; en producción debe declararse explícitamente.
 
 ### 2. Preparar o actualizar la Base de Datos (PostgreSQL + PostGIS)
 Con PostgreSQL y PostGIS instalados y el entorno virtual activado, desde la raíz del proyecto:

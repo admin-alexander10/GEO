@@ -23,6 +23,18 @@ class Settings:
     PROJECT_NAME: str = "GEORESCUE IA - Plataforma B2G & B2C"
     VERSION: str = "2.0.0"
     API_V1_STR: str = "/api/v1"
+    ALLOWED_ORIGINS: list[str] = [
+        origin.strip()
+        for origin in os.getenv(
+            "ALLOWED_ORIGINS",
+            "http://localhost:3000,http://127.0.0.1:3000,http://localhost:8000,http://127.0.0.1:8000,http://localhost:8001,http://127.0.0.1:8001"
+        ).split(",")
+        if origin.strip()
+    ]
+    if os.getenv("ENV", "").lower() == "production" and (
+        not os.getenv("ALLOWED_ORIGINS", "").strip() or not ALLOWED_ORIGINS
+    ):
+        raise ValueError("ALLOWED_ORIGINS debe configurarse cuando ENV=production.")
 
     # Base de Datos PostgreSQL / PostGIS
     DB_HOST: str = os.getenv("DB_HOST", "localhost")
