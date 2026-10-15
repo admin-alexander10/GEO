@@ -2,6 +2,8 @@ package pe.georescue.protection
 
 import android.Manifest
 import android.app.Activity
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -9,10 +11,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.telephony.SmsManager
 import android.util.Base64
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
+import androidx.work.ForegroundInfo
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
@@ -49,6 +54,29 @@ abstract class DeliveryWorker(context: Context, parameters: WorkerParameters) :
                 result = "QUEUED",
             ),
         )
+
+    override fun getForegroundInfo(): ForegroundInfo {
+        val manager = applicationContext.getSystemService(NotificationManager::class.java)
+        if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+            manager.getNotificationChannel("protection") == null
+        ) {
+            manager.createNotificationChannel(
+                NotificationChannel(
+                    "protection",
+                    "Protección sísmica",
+                    NotificationManager.IMPORTANCE_LOW,
+                ),
+            )
+        }
+        val notification = NotificationCompat.Builder(applicationContext, "protection")
+            .setSmallIcon(android.R.drawable.ic_lock_idle_lock)
+            .setContentTitle("Protección sísmica activa")
+            .setContentText("Vigilancia local del acelerómetro activa.")
+            .setOngoing(true)
+            .build()
+        return ForegroundInfo(103, notification)
+    }
 
     companion object {
         const val EXTRA_ALERT_ID = "client_alert_id"
@@ -140,49 +168,47 @@ class ApiAlertCancellationWorker(context: Context, parameters: WorkerParameters)
     }
 }
 
-class PlatformSmsWorker(context: Context, parameters: WorkerParameters) :
-    DeliveryWorker(context, parameters) {
-    override fun doWork(): Result {
-        val type = inputData.getString(EXTRA_TYPE) ?: "A"
-        val alert = readyAlert(allowClosed = type == "C") ?: return Result.success()
+enum class SmsDispatchOutcome {
+    QUEUED,
+    ALREADY_ACCEPTED,
+    ALREADY_IN_PROGRESS,
+    RETRY,
+}
+
+object SmsDelivery {
+    fun sendPlatform(
+        context: Context,
+        dao: ProtectionDao,
+        alert: AutomaticAlertEntity,
+        type: String,
+    ): SmsDispatchOutcome {
         if (
-            type != "C" &&
-            dao.successfulAttemptCountForType(alert.clientAlertId, "PLATFORM_SMS", type) > 0
-        ) return Result.success()
-        if (
-            type == "C" &&
-            dao.successfulAttemptCountForType(alert.clientAlertId, "PLATFORM_SMS", "C") > 0
-        ) return Result.success()
-        val config = dao.getConfig() ?: return Result.retry()
-        if (
-            ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.SEND_SMS) !=
+            ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) !=
             PackageManager.PERMISSION_GRANTED
-        ) return Result.retry()
+        ) return SmsDispatchOutcome.RETRY
+        val config = dao.getConfig() ?: return SmsDispatchOutcome.RETRY
         val target = config.platformPhone
         if (target.isBlank()) {
             dao.updateSmsState(alert.clientAlertId, "NUMERO_PLATAFORMA_REQUERIDO")
-            return Result.retry()
+            return SmsDispatchOutcome.RETRY
         }
         val latitude = alert.latitude
         val longitude = alert.longitude
         val precision = alert.precisionMeters
         val age = alert.currentLocationAgeSeconds()
         if (latitude == null || longitude == null || precision == null || age == null) {
-            requestLastLocation(alert)
-            return Result.retry()
+            return SmsDispatchOutcome.RETRY
         }
         if (
             type == "C" &&
-            dao.successfulAttemptCount(alert.clientAlertId, "PLATFORM_SMS") == 0
-        ) {
-            return Result.success()
-        }
+            dao.successfulAttemptCountForType(alert.clientAlertId, "PLATFORM_SMS", "A") == 0
+        ) return SmsDispatchOutcome.ALREADY_ACCEPTED
         val secret = try {
             val encoded = CredentialVault.decrypt(config.encryptedSigningSecret).toString(Charsets.UTF_8)
             Base64.decode(encoded, Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP)
         } catch (error: Exception) {
             dao.updateSmsState(alert.clientAlertId, "SECRETO_REQUERIDO")
-            return Result.retry()
+            return SmsDispatchOutcome.RETRY
         }
         val sms = try {
             Gr1Message.sign(
@@ -196,26 +222,150 @@ class PlatformSmsWorker(context: Context, parameters: WorkerParameters) :
                 severity = alert.severity,
                 secret = secret,
             )
+        } catch (_: Exception) {
+            dao.updateSmsState(alert.clientAlertId, "FIRMA_SMS_PENDIENTE")
+            return SmsDispatchOutcome.RETRY
         } finally {
             secret.fill(0)
         }
-        val attemptId = attempt(alert, "PLATFORM_SMS", target, type)
+        val now = System.currentTimeMillis()
+        val attemptId = dao.reserveSmsAttempt(
+            DeliveryAttemptEntity(
+                clientAlertId = alert.clientAlertId,
+                channel = "PLATFORM_SMS",
+                target = target,
+                type = type,
+                attemptedAt = now,
+                result = "QUEUED",
+                detail = "triggerAtMs=${alert.timestampSeconds * 1000L}",
+            ),
+            now,
+        ) ?: return when (
+            SmsSendPolicy.decision(
+                dao.getSmsAttempts(alert.clientAlertId, "PLATFORM_SMS", target, type),
+                System.currentTimeMillis(),
+            )
+        ) {
+            SmsSendDecision.ALREADY_ACCEPTED -> SmsDispatchOutcome.ALREADY_ACCEPTED
+            SmsSendDecision.ALREADY_IN_PROGRESS -> SmsDispatchOutcome.ALREADY_IN_PROGRESS
+            SmsSendDecision.SEND -> SmsDispatchOutcome.RETRY
+        }
         return try {
             val sent = SmsStatusReceiver.pendingIntent(
-                applicationContext, alert.clientAlertId, "PLATFORM_SMS", target, type, attemptId, "SENT",
+                context, alert.clientAlertId, "PLATFORM_SMS", target, type, attemptId, "SENT",
             )
             val delivered = SmsStatusReceiver.pendingIntent(
-                applicationContext, alert.clientAlertId, "PLATFORM_SMS", target, type, attemptId, "DELIVERED",
+                context, alert.clientAlertId, "PLATFORM_SMS", target, type, attemptId, "DELIVERED",
             )
-            applicationContext.getSystemService(SmsManager::class.java)
+            context.getSystemService(SmsManager::class.java)
                 .sendTextMessage(target, null, sms, sent, delivered)
             dao.updateSmsState(alert.clientAlertId, "SMS_EN_COLA_DEL_DISPOSITIVO")
-            AlertDelivery.notifyStatusChanged(applicationContext)
-            Result.success()
+            AlertDelivery.notifyStatusChanged(context)
+            SmsDispatchOutcome.QUEUED
         } catch (error: Exception) {
             dao.updateAttempt(attemptId, "RETRY", error.javaClass.simpleName)
             dao.updateSmsState(alert.clientAlertId, "REINTENTO_SMS_PENDIENTE")
-            Result.retry()
+            SmsDispatchOutcome.RETRY
+        }
+    }
+
+    fun sendTrustedContacts(context: Context, dao: ProtectionDao, alert: AutomaticAlertEntity): Boolean {
+        val latitude = alert.latitude ?: return false
+        val longitude = alert.longitude ?: return false
+        if (
+            ContextCompat.checkSelfPermission(context, Manifest.permission.SEND_SMS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) return false
+        val contacts = dao.getContacts().filter { it.consentedAt > 0 }
+        if (contacts.isEmpty()) return false
+        var retry = false
+        val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss 'UTC'", Locale.US).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }.format(Date(alert.timestampSeconds * 1000L))
+        contacts.forEach { contact ->
+            val existing = dao.getSmsAttempts(
+                alert.clientAlertId,
+                "CONTACT_SMS",
+                contact.phone,
+                "A",
+            )
+            when (SmsSendPolicy.decision(existing, System.currentTimeMillis())) {
+                SmsSendDecision.ALREADY_ACCEPTED -> return@forEach
+                SmsSendDecision.ALREADY_IN_PROGRESS -> {
+                    retry = true
+                    return@forEach
+                }
+                SmsSendDecision.SEND -> Unit
+            }
+            val name = Normalizer.normalize(contact.name, Normalizer.Form.NFD)
+                .replace(Regex("\\p{M}+"), "")
+                .filter { it.code in 32..126 }
+                .take(20)
+                .ifBlank { "Contacto" }
+            val lat = "%.5f".format(Locale.US, latitude)
+            val lng = "%.5f".format(Locale.US, longitude)
+            val text = "GEORESCUE ${alert.clientAlertId}: $name; sismo $lat,$lng; https://maps.google.com/?q=$lat,$lng; $time"
+            val now = System.currentTimeMillis()
+            val attemptId = dao.reserveSmsAttempt(
+                DeliveryAttemptEntity(
+                    clientAlertId = alert.clientAlertId,
+                    channel = "CONTACT_SMS",
+                    target = contact.phone,
+                    type = "A",
+                    attemptedAt = now,
+                    result = "QUEUED",
+                    detail = "triggerAtMs=${alert.timestampSeconds * 1000L}",
+                ),
+                now,
+            )
+            if (attemptId == null) {
+                retry = true
+                return@forEach
+            }
+            try {
+                require(text.toByteArray(Charsets.US_ASCII).size <= 160)
+                context.getSystemService(SmsManager::class.java).sendTextMessage(
+                    contact.phone,
+                    null,
+                    text,
+                    SmsStatusReceiver.pendingIntent(
+                        context, alert.clientAlertId, "CONTACT_SMS", contact.phone, "A", attemptId, "SENT",
+                    ),
+                    SmsStatusReceiver.pendingIntent(
+                        context, alert.clientAlertId, "CONTACT_SMS", contact.phone, "A", attemptId, "DELIVERED",
+                    ),
+                )
+            } catch (error: Exception) {
+                dao.updateAttempt(attemptId, "RETRY", error.javaClass.simpleName)
+                retry = true
+            }
+        }
+        return !retry
+    }
+}
+
+class PlatformSmsWorker(context: Context, parameters: WorkerParameters) :
+    DeliveryWorker(context, parameters) {
+    override fun doWork(): Result {
+        val type = inputData.getString(EXTRA_TYPE) ?: "A"
+        val alert = readyAlert(allowClosed = type == "C") ?: return Result.success()
+        val target = dao.getConfig()?.platformPhone.orEmpty()
+        if (alert.latitude == null || alert.longitude == null || alert.precisionMeters == null ||
+            alert.currentLocationAgeSeconds() == null
+        ) {
+            requestLastLocation(alert)
+            return Result.retry()
+        }
+        if (target.isBlank()) {
+            dao.updateSmsState(alert.clientAlertId, "NUMERO_PLATAFORMA_REQUERIDO")
+            return Result.retry()
+        }
+        if (type == "C" && dao.successfulAttemptCountForType(alert.clientAlertId, "PLATFORM_SMS", "A") == 0) {
+            return Result.success()
+        }
+        return when (SmsDelivery.sendPlatform(applicationContext, dao, alert, type)) {
+            SmsDispatchOutcome.QUEUED, SmsDispatchOutcome.ALREADY_ACCEPTED -> Result.success()
+            SmsDispatchOutcome.ALREADY_IN_PROGRESS, SmsDispatchOutcome.RETRY -> Result.retry()
         }
     }
 
@@ -259,56 +409,11 @@ class TrustedContactsWorker(context: Context, parameters: WorkerParameters) :
     DeliveryWorker(context, parameters) {
     override fun doWork(): Result {
         val alert = readyAlert() ?: return Result.success()
-        val latitude = alert.latitude ?: return Result.retry()
-        val longitude = alert.longitude ?: return Result.retry()
-        if (
-            ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.SEND_SMS) !=
-            PackageManager.PERMISSION_GRANTED
-        ) return Result.retry()
-        val contacts = dao.getContacts().filter { it.consentedAt > 0 }
-        if (contacts.isEmpty()) return Result.retry()
-        var failed = false
-        val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss 'UTC'", Locale.US).apply {
-            timeZone = TimeZone.getTimeZone("UTC")
-        }.format(Date(alert.timestampSeconds * 1000L))
-        contacts.forEach { contact ->
-            if (dao.successfulTargetAttemptCount(alert.clientAlertId, "CONTACT_SMS", contact.phone, "A") > 0) {
-                return@forEach
-            }
-            val name = Normalizer.normalize(contact.name, Normalizer.Form.NFD)
-                .replace(Regex("\\p{M}+"), "")
-                .filter { it.code in 32..126 }
-                .take(20)
-                .ifBlank { "Contacto" }
-            val lat = "%.5f".format(Locale.US, latitude)
-            val lng = "%.5f".format(Locale.US, longitude)
-            val text = "GEORESCUE ${alert.clientAlertId}: $name; sismo $lat,$lng; https://maps.google.com/?q=$lat,$lng; $time"
-            val attemptId = attempt(alert, "CONTACT_SMS", contact.phone, "A")
-            try {
-                send(alert, contact.phone, text, attemptId)
-            } catch (error: Exception) {
-                dao.updateAttempt(attemptId, "RETRY", error.javaClass.simpleName)
-                failed = true
-            }
+        return if (SmsDelivery.sendTrustedContacts(applicationContext, dao, alert)) {
+            Result.success()
+        } else {
+            Result.retry()
         }
-        if (failed) return Result.retry()
-        return Result.success()
-    }
-
-    private fun send(alert: AutomaticAlertEntity, target: String, text: String, attemptId: Long) {
-        val manager = applicationContext.getSystemService(SmsManager::class.java)
-        require(text.toByteArray(Charsets.US_ASCII).size <= 160)
-        manager.sendTextMessage(
-            target,
-            null,
-            text,
-            SmsStatusReceiver.pendingIntent(
-                applicationContext, alert.clientAlertId, "CONTACT_SMS", target, "A", attemptId, "SENT",
-            ),
-            SmsStatusReceiver.pendingIntent(
-                applicationContext, alert.clientAlertId, "CONTACT_SMS", target, "A", attemptId, "DELIVERED",
-            ),
-        )
     }
 }
 
@@ -385,7 +490,17 @@ class SmsStatusReceiver : BroadcastReceiver() {
                 } else {
                     if (event.startsWith("DELIVERED")) "DELIVERY_NOT_CONFIRMED" else "SEND_FAILED"
                 }
-                if (attemptId >= 0L) dao.updateAttempt(attemptId, status, "resultCode=$callbackCode")
+                if (attemptId >= 0L) {
+                    val details = attempt?.detail.orEmpty().split(";")
+                        .filter { it.isNotBlank() && !it.startsWith("resultCode=") }
+                        .toMutableList()
+                    if (event == "SENT" && callbackCode == Activity.RESULT_OK) {
+                        details.removeAll { it.startsWith("sentAtMs=") }
+                        details.add("sentAtMs=${System.currentTimeMillis()}")
+                    }
+                    details.add("resultCode=$callbackCode")
+                    dao.updateAttempt(attemptId, status, details.joinToString(";"))
+                }
                 if (channel == "PLATFORM_SMS") {
                     dao.updateSmsState(
                         id,
@@ -425,7 +540,7 @@ class SmsStatusReceiver : BroadcastReceiver() {
                             ExistingWorkPolicy.REPLACE,
                             OneTimeWorkRequestBuilder<PlatformSmsWorker>()
                                 .setInputData(input)
-                                .setInitialDelay(30, TimeUnit.SECONDS)
+                                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                                 .setBackoffCriteria(androidx.work.BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
                                 .build(),
                         )
@@ -435,7 +550,7 @@ class SmsStatusReceiver : BroadcastReceiver() {
                             ExistingWorkPolicy.REPLACE,
                             OneTimeWorkRequestBuilder<TrustedContactsWorker>()
                                 .setInputData(input)
-                                .setInitialDelay(30, TimeUnit.SECONDS)
+                                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                                 .setBackoffCriteria(androidx.work.BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
                                 .build(),
                         )

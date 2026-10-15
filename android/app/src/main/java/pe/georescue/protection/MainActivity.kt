@@ -45,7 +45,13 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         status = TextView(this).apply { textSize = 18f }
-        apiUrl = field("URL HTTPS de la API (p. ej. https://api.ejemplo.pe)")
+        apiUrl = field(
+            if (BuildConfig.DEBUG) {
+                "URL HTTPS o HTTP (depuración; p. ej. http://192.168.1.10:8001)"
+            } else {
+                "URL HTTPS de la API (p. ej. https://api.ejemplo.pe)"
+            },
+        )
         platformPhone = field("Número SMS de la plataforma (+E.164)")
         username = field("Usuario GEORESCUE")
         password = field("Contraseña", password = true)
@@ -179,7 +185,7 @@ class MainActivity : Activity() {
             return
         }
         if (!isAllowedApiUrl(base)) {
-            showMessage("Configura una URL HTTPS válida para la API.")
+            showMessage(apiUrlValidationMessage())
             return
         }
         runDatabaseAction("Configuración local guardada.") { dao ->
@@ -197,7 +203,7 @@ class MainActivity : Activity() {
             return
         }
         if (!isAllowedApiUrl(base)) {
-            showMessage("La URL de la API debe usar HTTPS.")
+            showMessage(apiUrlValidationMessage())
             return
         }
         runAction("Sesión iniciada.") {
@@ -396,6 +402,24 @@ class MainActivity : Activity() {
                     if (latest.apiState == "RECIBIDA_POR_SERVIDOR") lines.add("Recibida por el servidor.")
                     if (latest.apiState == "CANCELADA_EN_SERVIDOR") lines.add("Cancelación recibida por el servidor.")
                     if (latest.apiState.startsWith("CANCELACION_")) lines.add("Cancelación API pendiente de confirmación.")
+                    val firstSmsSent = attempts.mapNotNull { attempt ->
+                        if (attempt.result != "SMS_SENT_TO_NETWORK" && attempt.result != "SMS_DELIVERED") {
+                            return@mapNotNull null
+                        }
+                        val sentAt = attempt.detail.split(";")
+                            .firstOrNull { it.startsWith("sentAtMs=") }
+                            ?.substringAfter("=")
+                            ?.toLongOrNull() ?: return@mapNotNull null
+                        val triggeredAt = attempt.detail.split(";")
+                            .firstOrNull { it.startsWith("triggerAtMs=") }
+                            ?.substringAfter("=")
+                            ?.toLongOrNull() ?: latest.timestampSeconds * 1000L
+                        sentAt to triggeredAt
+                    }.minByOrNull { it.first }
+                    firstSmsSent?.let { (sentAt, triggeredAt) ->
+                        val seconds = ((sentAt - triggeredAt).coerceAtLeast(0L) / 1000L)
+                        lines.add("SMS enviado $seconds s después del disparo.")
+                    }
                     attempts.forEach { attempt ->
                         ProtectionReadiness.deliveryLabel(attempt.result, attempt.target)?.let(lines::add)
                     }
@@ -421,7 +445,14 @@ class MainActivity : Activity() {
     private fun validE164(value: String): Boolean = value.matches(Regex("^\\+[1-9][0-9]{7,14}$"))
 
     private fun isAllowedApiUrl(value: String): Boolean =
-        value.startsWith("https://")
+        ApiUrlPolicy.isAllowed(value, BuildConfig.DEBUG)
+
+    private fun apiUrlValidationMessage(): String =
+        if (BuildConfig.DEBUG) {
+            "Configura una URL HTTPS o una URL HTTP solo para modo depuración."
+        } else {
+            "Configura una URL HTTPS válida para la API."
+        }
 
     private fun showMessage(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show()

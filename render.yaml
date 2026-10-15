@@ -1,0 +1,46 @@
+# Blueprint de Render: crea la base de datos y el servicio web desde tu repositorio.
+# Copia este archivo a la RAÍZ del repositorio (junto a backend/ y frontend/).
+databases:
+  - name: georescue-db
+    plan: free
+    databaseName: georescue
+    user: georescue
+    ipAllowList: []          # solo accesible desde servicios de Render
+
+services:
+  - type: web
+    name: georescue
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: python deploy/render_inicio.py
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: ENV
+        value: production
+      - key: DB_HOST
+        fromDatabase: {name: georescue-db, property: host}
+      - key: DB_PORT
+        fromDatabase: {name: georescue-db, property: port}
+      - key: DB_NAME
+        fromDatabase: {name: georescue-db, property: database}
+      - key: DB_USER
+        fromDatabase: {name: georescue-db, property: user}
+      - key: DB_PASSWORD
+        fromDatabase: {name: georescue-db, property: password}
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SMS_WEBHOOK_SECRET
+        generateValue: true
+      - key: SMS_OTP_PEPPER
+        generateValue: true
+      - key: DEVICE_KEY_SEED
+        generateValue: true
+      - key: SMS_PROVIDER
+        value: console
+      - key: SMS_CONSOLE_PRINT_MESSAGES
+        value: "true"
+      - key: OWNER_PASSWORD
+        sync: false           # Render te la pedirá al crear el Blueprint (mín. 10 caracteres)

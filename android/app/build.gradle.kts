@@ -7,6 +7,9 @@ plugins {
 android {
     namespace = "pe.georescue.protection"
     compileSdk = 35
+    buildFeatures {
+        buildConfig = true
+    }
 
     defaultConfig {
         applicationId = "pe.georescue.protection"

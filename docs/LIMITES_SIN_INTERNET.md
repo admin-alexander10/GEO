@@ -49,6 +49,9 @@
 | `INTERNET` | Iniciar sesión, solicitar/verificar OTP, registrar el dispositivo y enviar/reintentar la alerta a la API. |
 | `ACCESS_NETWORK_STATE` | Permitir que los trabajos de API esperen conectividad y reintenten cuando vuelva la red. |
 
+La API exige HTTPS en builds release. Solo el source set debug permite HTTP
+para pruebas contra un backend local; esa excepción no se incluye en release.
+
 La ubicación en segundo plano, SMS y notificaciones se solicitan durante la
 configuración. El permiso de batería sin restricciones se habilita desde los
 ajustes del sistema; sin él la pantalla no muestra la protección como lista.

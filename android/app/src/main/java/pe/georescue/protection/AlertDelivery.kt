@@ -7,12 +7,14 @@ import android.location.Location
 import android.os.Handler
 import android.os.Looper
 import android.os.Build
+import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -108,8 +110,31 @@ object AlertDelivery {
                 } finally {
                     eventStore.close()
                 }
-                enqueueDispatchWorkers(appContext, clientAlertId)
-                notifyStatusChanged(appContext)
+                val savedAlert = dao.getAlert(clientAlertId) ?: alert
+                try {
+                    enqueueApiWorker(appContext, clientAlertId)
+                } catch (error: Exception) {
+                    Log.e(TAG, "No se pudo programar el envío API de la alerta.", error)
+                }
+                try {
+                    try {
+                        SmsDelivery.sendPlatform(appContext, dao, savedAlert, "A")
+                    } catch (error: Exception) {
+                        Log.e(TAG, "No se pudo iniciar el envío inmediato del SMS firmado.", error)
+                    }
+                    try {
+                        SmsDelivery.sendTrustedContacts(appContext, dao, savedAlert)
+                    } catch (error: Exception) {
+                        Log.e(TAG, "No se pudo iniciar el envío inmediato a contactos.", error)
+                    }
+                } finally {
+                    try {
+                        enqueueSmsWorkers(appContext, clientAlertId)
+                    } catch (error: Exception) {
+                        Log.e(TAG, "No se pudieron programar los reintentos SMS.", error)
+                    }
+                    notifyStatusChanged(appContext)
+                }
             }
         }
 
@@ -150,6 +175,11 @@ object AlertDelivery {
     }
 
     fun enqueueDispatchWorkers(context: Context, clientAlertId: String) {
+        enqueueApiWorker(context, clientAlertId)
+        enqueueSmsWorkers(context, clientAlertId)
+    }
+
+    private fun enqueueApiWorker(context: Context, clientAlertId: String) {
         val manager = WorkManager.getInstance(context)
         val input = Data.Builder().putString(DeliveryWorker.EXTRA_ALERT_ID, clientAlertId).build()
         val network = Constraints.Builder()
@@ -160,15 +190,26 @@ object AlertDelivery {
             ExistingWorkPolicy.KEEP,
             OneTimeWorkRequestBuilder<ApiAlertWorker>().setInputData(input).setConstraints(network).build(),
         )
+    }
+
+    private fun enqueueSmsWorkers(context: Context, clientAlertId: String) {
+        val manager = WorkManager.getInstance(context)
+        val input = Data.Builder().putString(DeliveryWorker.EXTRA_ALERT_ID, clientAlertId).build()
         manager.enqueueUniqueWork(
             "alert-signed-sms:$clientAlertId",
             ExistingWorkPolicy.KEEP,
-            OneTimeWorkRequestBuilder<PlatformSmsWorker>().setInputData(input).build(),
+            OneTimeWorkRequestBuilder<PlatformSmsWorker>()
+                .setInputData(input)
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                .build(),
         )
         manager.enqueueUniqueWork(
             "alert-contacts-sms:$clientAlertId",
             ExistingWorkPolicy.KEEP,
-            OneTimeWorkRequestBuilder<TrustedContactsWorker>().setInputData(input).build(),
+            OneTimeWorkRequestBuilder<TrustedContactsWorker>()
+                .setInputData(input)
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                .build(),
         )
     }
 
@@ -216,7 +257,10 @@ object AlertDelivery {
         WorkManager.getInstance(context).enqueueUniqueWork(
             "alert-signed-sms-cancel:$clientAlertId",
             ExistingWorkPolicy.KEEP,
-            OneTimeWorkRequestBuilder<PlatformSmsWorker>().setInputData(input).build(),
+            OneTimeWorkRequestBuilder<PlatformSmsWorker>()
+                .setInputData(input)
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                .build(),
         )
     }
 
@@ -283,6 +327,7 @@ object AlertDelivery {
         val cancellationToken: CancellationTokenSource,
     )
 
+    private const val TAG = "AlertDelivery"
 }
 
 class RetryOpenAlertsWorker(context: Context, parameters: androidx.work.WorkerParameters) :

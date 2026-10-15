@@ -10,6 +10,7 @@ import androidx.room.PrimaryKey
 import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.Transaction
 
 @Entity(tableName = "protection_config")
 data class ProtectionConfigEntity(
@@ -130,8 +131,48 @@ interface ProtectionDao {
     @Query("SELECT COUNT(*) FROM delivery_attempts WHERE clientAlertId = :alertId AND channel = :channel AND target = :target AND type = :type AND result IN ('SMS_SENT_TO_NETWORK', 'SMS_DELIVERED')")
     fun successfulTargetAttemptCount(alertId: String, channel: String, target: String, type: String): Int
 
+    @Query("SELECT * FROM delivery_attempts WHERE clientAlertId = :alertId AND channel = :channel AND target = :target AND type = :type")
+    fun getSmsAttempts(alertId: String, channel: String, target: String, type: String): List<DeliveryAttemptEntity>
+
+    @Transaction
+    fun reserveSmsAttempt(attempt: DeliveryAttemptEntity, nowMillis: Long): Long? {
+        val existing = getSmsAttempts(
+            attempt.clientAlertId,
+            attempt.channel,
+            attempt.target,
+            attempt.type,
+        )
+        if (SmsSendPolicy.decision(existing, nowMillis) != SmsSendDecision.SEND) return null
+        return addAttempt(attempt)
+    }
+
     @Query("SELECT * FROM delivery_attempts WHERE clientAlertId = :alertId ORDER BY attemptedAt DESC")
     fun getAttempts(alertId: String): List<DeliveryAttemptEntity>
+}
+
+enum class SmsSendDecision {
+    SEND,
+    ALREADY_ACCEPTED,
+    ALREADY_IN_PROGRESS,
+}
+
+object SmsSendPolicy {
+    private const val IN_PROGRESS_TIMEOUT_MILLIS = 120_000L
+
+    fun decision(attempts: List<DeliveryAttemptEntity>, nowMillis: Long): SmsSendDecision {
+        if (attempts.any { it.result == "SMS_SENT_TO_NETWORK" || it.result == "SMS_DELIVERED" }) {
+            return SmsSendDecision.ALREADY_ACCEPTED
+        }
+        if (
+            attempts.any {
+                val age = nowMillis - it.attemptedAt
+                it.result == "QUEUED" && age >= 0L && age <= IN_PROGRESS_TIMEOUT_MILLIS
+            }
+        ) {
+            return SmsSendDecision.ALREADY_IN_PROGRESS
+        }
+        return SmsSendDecision.SEND
+    }
 }
 
 fun AutomaticAlertEntity.currentLocationAgeSeconds(nowMillis: Long = System.currentTimeMillis()): Long? =

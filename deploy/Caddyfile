@@ -1,0 +1,10 @@
+{$WEB_DOMAIN} {
+	root * /srv/frontend
+	encode gzip
+	file_server
+}
+
+{$API_DOMAIN} {
+	encode gzip
+	reverse_proxy backend:8000
+}

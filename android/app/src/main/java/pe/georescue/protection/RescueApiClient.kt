@@ -113,8 +113,12 @@ class RescueApiClient(private val baseUrl: String) {
 
     private fun endpointUrl(path: String): String {
         val normalizedBase = baseUrl.trim().trimEnd('/')
-        require(normalizedBase.startsWith("https://")) {
-            "La URL de la API debe usar HTTPS."
+        require(ApiUrlPolicy.isAllowed(normalizedBase, BuildConfig.DEBUG)) {
+            if (BuildConfig.DEBUG) {
+                "La URL debe usar HTTPS o HTTP en modo depuración."
+            } else {
+                "La URL de la API debe usar HTTPS."
+            }
         }
         val apiBase = if (normalizedBase.endsWith("/api/v1")) normalizedBase else "$normalizedBase/api/v1"
         return "$apiBase$path"
