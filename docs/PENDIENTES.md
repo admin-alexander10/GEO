@@ -76,3 +76,16 @@ como acuerdos confirmados.
 Las alertas actualmente se persisten en la plataforma. Los buzones familiares
 solo incluyen vínculos aceptados y no revocados; no se envía información a
 sistemas externos.
+
+## Protección automática Android
+
+- Integrar Nearby Connections para retransmitir alertas firmadas conservando
+  exactamente el mensaje GR1 original; esta función se dejó para una fase
+  posterior y no forma parte del primer lote.
+- Compilar y ejecutar los tests Android en Android Studio; el entorno de
+  desarrollo no dispone de Gradle ni Gradle Wrapper.
+- Validar en teléfonos reales el límite de cinco segundos de ubicación y el
+  objetivo de envío en menos de 20 segundos, además de entrega SMS, reinicio,
+  modo avión con radio celular activa y políticas de batería/fabricante.
+- Configurar el número SMS real de la plataforma antes de activar protección;
+  no hay un número receptor predefinido en el proyecto.

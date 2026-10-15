@@ -8,6 +8,11 @@ import android.os.Build
 class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent?.action != Intent.ACTION_BOOT_COMPLETED) return
+        androidx.work.WorkManager.getInstance(context).enqueueUniqueWork(
+            "recover-open-alerts",
+            androidx.work.ExistingWorkPolicy.KEEP,
+            androidx.work.OneTimeWorkRequestBuilder<RetryOpenAlertsWorker>().build(),
+        )
         val enabled = context.getSharedPreferences(ProtectionService.PREFERENCES, Context.MODE_PRIVATE)
             .getBoolean(ProtectionService.KEY_ENABLED, false)
         if (!enabled) return

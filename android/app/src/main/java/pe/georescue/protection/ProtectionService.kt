@@ -38,6 +38,11 @@ class ProtectionService : Service(), SensorEventListener {
             return START_NOT_STICKY
         }
         if (intent?.action == ACTION_AUTO_ALERT) {
+            AlertDelivery.startAutomaticAlert(
+                this,
+                intent.getLongExtra(EXTRA_EVENT_ID, -1),
+                intent.getIntExtra(EXTRA_SEVERITY, 3),
+            )
             sendBroadcast(
                 Intent(ACTION_AUTO_ALERT).setPackage(packageName).apply {
                     putExtra(EXTRA_EVENT_ID, intent.getLongExtra(EXTRA_EVENT_ID, -1))
